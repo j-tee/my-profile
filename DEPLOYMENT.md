@@ -62,15 +62,15 @@ rm -rf .eslintrc.json .git .github .gitignore .hintrc .stylelintrc.json
 ### 2. Set proper permissions
 
 ```bash
-sudo chown -R deploy:www-data /var/www/portfolio
-sudo chmod -R 755 /var/www/portfolio
+sudo chown -R deploy:www-data /var/www/portfolio/frontend
+sudo chmod -R 755 /var/www/portfolio/frontend
 ```
 
 ### 3. Configure web server
 
 #### For Nginx:
 ```bash
-sudo nano /etc/nginx/sites-available/portfolio
+sudo nano /etc/nginx/sites-available/portfolio/frontend
 ```
 
 Add/update:
@@ -79,7 +79,7 @@ server {
     listen 80;
     server_name your-domain.com;  # Update with your domain
     
-    root /var/www/portfolio;
+    root /var/www/portfolio/frontend/dist;
     index index.html;
     
     location / {
@@ -113,7 +113,7 @@ git push origin main
 
 GitHub Actions will automatically:
 1. Build your React app
-2. Deploy to `/var/www/portfolio`
+2. Deploy to `/var/www/portfolio/frontend`
 3. Your site will be live!
 
 ### Manual Deployment (Alternative)
@@ -125,7 +125,7 @@ If you need to deploy manually:
 npm run build
 
 # Deploy via SCP
-scp -P 7822 -r dist/* deploy@68.66.251.79:/var/www/portfolio/
+scp -P 7822 -r dist/* deploy@68.66.251.79:/var/www/portfolio/frontend
 ```
 
 ## Troubleshooting
@@ -144,8 +144,8 @@ ssh -p 7822 deploy@68.66.251.79 "echo 'Connection successful'"
 ### Permission Issues
 ```bash
 # On server
-sudo chown -R deploy:www-data /var/www/portfolio
-sudo chmod -R 755 /var/www/portfolio
+sudo chown -R deploy:www-data /var/www/portfolio/frontend
+sudo chmod -R 755 /var/www/portfolio/frontend
 ```
 
 ### Build Issues
@@ -160,7 +160,7 @@ If you need environment variables in production:
 
 1. Create `.env.production` in your project root:
 ```env
-VITE_API_URL=https://your-api.com
+VITE_API_URL=https://profileapi.alphalogiquetechnologies.com
 ```
 
 2. Use in your code:
@@ -178,7 +178,7 @@ To rollback to a previous version:
 ## Post-Deployment Checks
 
 After deployment, verify:
-- [ ] Site loads: http://your-domain.com
+- [ ] Site loads: http://profile.alphalogiquetechnologies.com
 - [ ] All routes work (refresh on different pages)
 - [ ] Assets load (images, CSS, JS)
 - [ ] API calls work (if applicable)
