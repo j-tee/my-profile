@@ -1,21 +1,7 @@
-import React, { createContext, useContext, useState, useEffect, type ReactNode } from 'react';
+import React, { createContext, useState, useEffect, type ReactNode } from 'react';
 import { authService } from '../services/auth.service';
 import { tokenManager } from '../services/api';
-import type { User, LoginRequest, RegisterRequest } from '../types/auth.types';
-
-export interface AuthContextType {
-  user: User | null;
-  loading: boolean;
-  error: string | null;
-  login: (credentials: LoginRequest) => Promise<void>;
-  register: (data: RegisterRequest) => Promise<void>;
-  logout: () => void;
-  updateUser: (user: User) => void;
-  clearError: () => void;
-  isAuthenticated: boolean;
-  isAdmin: boolean;
-  isEditor: boolean;
-}
+import type { AuthContextType } from './AuthContext.types';
 
 export const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
