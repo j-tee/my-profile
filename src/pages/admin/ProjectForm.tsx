@@ -3,6 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { FaSave, FaArrowLeft } from 'react-icons/fa';
 import { projectsService } from '../../services/portfolio.service';
 import type { ProjectRequest } from '../../types/project.types';
+import type { Project as PortfolioProject } from '../../types/portfolio.types';
 import '../admin/AdminDashboard.css';
 
 const ProjectForm: React.FC = () => {
@@ -30,7 +31,7 @@ const ProjectForm: React.FC = () => {
   useEffect(() => {
     const loadProject = async (projectId: string) => {
       try {
-        const project = await projectsService.get(projectId);
+        const project: PortfolioProject = await projectsService.get(projectId);
         setFormData({
           title: project.title,
           description: project.description,
