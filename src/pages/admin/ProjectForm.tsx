@@ -3,6 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { FaSave, FaArrowLeft } from 'react-icons/fa';
 import { projectsService } from '../../services/portfolio.service';
 import type { ProjectRequest } from '../../types/project.types';
+import type { Project as PortfolioProject } from '../../types/portfolio.types';
 import '../admin/AdminDashboard.css';
 
 const ProjectForm: React.FC = () => {
@@ -40,7 +41,7 @@ const ProjectForm: React.FC = () => {
           end_date: project.end_date || '',
           github_url: project.github_url || '',
           live_url: project.project_url || '',
-          image_url: project.image || '',
+          image_url: project.image || project.project_url || '',
           is_featured: project.is_featured,
         });
       } catch (error) {
