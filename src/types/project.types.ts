@@ -81,7 +81,7 @@ export interface ProjectCreateRequest {
   order?: number;
 }
 
-export interface ProjectUpdateRequest extends Partial<ProjectCreateRequest> {}
+export type ProjectUpdateRequest = Partial<ProjectCreateRequest>;
 
 // Media upload interfaces (for frontend form)
 export interface ProjectMedia {
@@ -128,10 +128,10 @@ export interface ProjectRequest {
   is_featured: boolean;
 }
 
-export interface ProjectRequestWithMedia extends ProjectRequest {
+export type ProjectRequestWithMedia = ProjectRequest & {
   media: ProjectMedia[];
   video_url?: string;
-}
+};
 
 export interface CreateProjectDTO extends ProjectCreateRequest {}
 export type UpdateProjectDTO = ProjectUpdateRequest;

@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { FaGithub, FaExternalLinkAlt, FaCalendar, FaStar } from 'react-icons/fa';
 import { projectService } from '../services/project.service';
@@ -14,7 +13,7 @@ const ProjectsPage = () => {
 
   useEffect(() => {
     fetchProjects();
-  }, [filter]);
+  }, [filter, fetchProjects]);
 
   const fetchProjects = async () => {
     try {

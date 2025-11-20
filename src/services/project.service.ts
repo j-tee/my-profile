@@ -1,6 +1,5 @@
 import apiClient from './api';
 import type { 
-  ProjectListItem,
   ProjectDetail,
   ProjectCreateRequest,
   ProjectUpdateRequest,

@@ -74,7 +74,7 @@ const ProjectForm: React.FC = () => {
         
         // Load existing images into mediaItems for display
         if (project.images && project.images.length > 0) {
-          const existingMedia: ProjectMedia[] = project.images.map((img, index) => ({
+          const existingMedia: ProjectMedia[] = project.images.map((img) => ({
             id: img.id,
             type: 'image' as const,
             url: img.image_url,
@@ -156,38 +156,6 @@ const ProjectForm: React.FC = () => {
     e.target.value = '';
   };
 
-  const handleAddVideoUrl = () => {
-    if (!videoUrl.trim()) return;
-    
-    // Validate video URL (YouTube, Vimeo, direct links)
-    const videoPatterns = [
-      /youtube\.com\/watch\?v=/,
-      /youtu\.be\//,
-      /vimeo\.com\//,
-      /\.mp4$/,
-      /\.webm$/,
-      /\.mov$/
-    ];
-    
-    const isValid = videoPatterns.some(pattern => pattern.test(videoUrl));
-    if (!isValid) {
-      toast.error('Please enter a valid video URL (YouTube, Vimeo, or direct video link)');
-      return;
-    }
-    
-    const newItem = {
-      id: `${Date.now()}-${Math.random()}`,
-      type: 'video' as const,
-      url: videoUrl,
-      preview: getVideoThumbnail(videoUrl),
-      caption: captionInput
-    };
-    
-    setMediaItems((prev) => [...prev, newItem]);
-    setVideoUrl('');
-    setCaptionInput('');
-  };
-
   const getVideoThumbnail = (url: string): string => {
     // Extract YouTube thumbnail
     const youtubeMatch = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([^&]+)/);
@@ -203,27 +171,7 @@ const ProjectForm: React.FC = () => {
     setMediaItems((prev) => prev.filter((item) => item.id !== id));
   };
 
-  const updateCaption = (id: string, caption: string) => {
-    setMediaItems((prev) =>
-      prev.map((item) => (item.id === id ? { ...item, caption } : item))
-    );
-  };
-
-  const moveMedia = (id: string, direction: 'up' | 'down') => {
-    setMediaItems((prev) => {
-      const index = prev.findIndex((item) => item.id === id);
-      if (index === -1) return prev;
-      
-      const newIndex = direction === 'up' ? index - 1 : index + 1;
-      if (newIndex < 0 || newIndex >= prev.length) return prev;
-      
-      const newItems = [...prev];
-      [newItems[index], newItems[newIndex]] = [newItems[newIndex], newItems[index]];
-      return newItems;
-    });
-  };
-
-  const handleAddTechnology = (e: React.KeyboardEvent<HTMLInputElement> | React.FormEvent) => {
+  const moveMedia = (id: string, direction: 'up' | 'down') => {Element> | React.FormEvent) => {
     if ('key' in e && e.key === 'Enter') {
       e.preventDefault();
       const tech = techInput.trim();
