@@ -1,6 +1,6 @@
 import React, { useState, type FormEvent, type ChangeEvent } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { useAuth } from '../contexts/AuthContext';
+import { useAuth } from '../contexts/useAuth';
 import type { RegisterRequest } from '../types/auth.types';
 import './AuthPages.css';
 

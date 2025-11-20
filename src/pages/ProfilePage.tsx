@@ -1,5 +1,5 @@
 import React, { useState, type FormEvent, type ChangeEvent } from 'react';
-import { useAuth } from '../contexts/AuthContext';
+import { useAuth } from '../contexts/useAuth';
 import { authService } from '../services/auth.service';
 import type { UpdateProfileRequest, ChangePasswordRequest, MFASetupResponse } from '../types/auth.types';
 import { FaShieldAlt, FaCheckCircle, FaTimesCircle } from 'react-icons/fa';

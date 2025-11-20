@@ -27,35 +27,35 @@ const ProjectForm: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [loadingData, setLoadingData] = useState(isEdit);
 
-  const loadProject = async (projectId: string) => {
-    try {
-      const project = await projectsService.get(projectId);
-      setFormData({
-        title: project.title,
-        description: project.description,
-        technologies: project.technologies,
-        status: project.current ? 'in_progress' : 'completed',
-        start_date: project.startDate,
-        end_date: project.endDate || '',
-        github_url: project.githubUrl || '',
-        live_url: project.projectUrl || '',
-        image_url: project.images?.[0]?.url || '',
-        is_featured: project.featured,
-      });
-    } catch (error) {
-      console.error('Failed to load project:', error);
-      alert('Failed to load project');
-      navigate('/admin/projects');
-    } finally {
-      setLoadingData(false);
-    }
-  };
-
   useEffect(() => {
+    const loadProject = async (projectId: string) => {
+      try {
+        const project = await projectsService.get(projectId);
+        setFormData({
+          title: project.title,
+          description: project.description,
+          technologies: project.technologies,
+          status: project.current ? 'in_progress' : 'completed',
+          start_date: project.startDate,
+          end_date: project.endDate || '',
+          github_url: project.githubUrl || '',
+          live_url: project.projectUrl || '',
+          image_url: project.images?.[0]?.url || '',
+          is_featured: project.featured,
+        });
+      } catch (error) {
+        console.error('Failed to load project:', error);
+        alert('Failed to load project');
+        navigate('/admin/projects');
+      } finally {
+        setLoadingData(false);
+      }
+    };
+
     if (isEdit && id) {
       loadProject(id);
     }
-  }, [id, isEdit, loadProject]);
+  }, [id, isEdit, navigate]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value, type } = e.target;
