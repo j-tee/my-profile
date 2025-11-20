@@ -1,4 +1,4 @@
-export { apiClient } from './apiClient';
+export { default as apiClient } from './api';
 export { profileService } from './profile.service';
 export { experienceService } from './experience.service';
 export { educationService } from './education.service';

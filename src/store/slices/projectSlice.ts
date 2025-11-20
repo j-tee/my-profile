@@ -36,6 +36,8 @@ const initialState: ProjectState = {
   actionLoading: false,
 };
 
+const toApiError = (payload: unknown): ApiError | null => (payload as ApiError | undefined) ?? null;
+
 // Async thunks
 export const fetchProjects = createAsyncThunk<
   PaginatedResponse<ProjectListItem>,
@@ -47,8 +49,8 @@ export const fetchProjects = createAsyncThunk<
     return {
       results: result.results,
       count: result.count,
-      next: result.next,
-      previous: result.previous,
+      next: result.next ?? undefined,
+      previous: result.previous ?? undefined,
       page,
       pageSize: 10,
       totalPages: Math.ceil(result.count / 10),
@@ -151,7 +153,7 @@ const projectSlice = createSlice({
       })
       .addCase(
         fetchProjects.fulfilled,
-        (state, action: PayloadAction<PaginatedResponse<ProjectDetail>>) => {
+        (state, action: PayloadAction<PaginatedResponse<ProjectListItem>>) => {
           state.loading = false;
           state.projects = action.payload.results;
           state.pagination = {
@@ -166,7 +168,7 @@ const projectSlice = createSlice({
       )
       .addCase(fetchProjects.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload ?? null;
+        state.error = toApiError(action.payload);
       })
 
       // Fetch featured projects
@@ -179,7 +181,7 @@ const projectSlice = createSlice({
       })
       .addCase(fetchFeaturedProjects.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload ?? null;
+        state.error = toApiError(action.payload);
       })
 
       // Fetch project by ID
@@ -193,7 +195,7 @@ const projectSlice = createSlice({
       })
       .addCase(fetchProjectById.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload ?? null;
+        state.error = toApiError(action.payload);
       })
 
       // Create project
@@ -207,7 +209,7 @@ const projectSlice = createSlice({
       })
       .addCase(createProject.rejected, (state, action) => {
         state.actionLoading = false;
-        state.error = action.payload ?? null;
+        state.error = toApiError(action.payload);
       })
 
       // Update project
@@ -227,7 +229,7 @@ const projectSlice = createSlice({
       })
       .addCase(updateProject.rejected, (state, action) => {
         state.actionLoading = false;
-        state.error = action.payload ?? null;
+        state.error = toApiError(action.payload);
       })
 
       // Delete project
@@ -241,7 +243,7 @@ const projectSlice = createSlice({
       })
       .addCase(deleteProject.rejected, (state, action) => {
         state.actionLoading = false;
-        state.error = action.payload ?? null;
+        state.error = toApiError(action.payload);
       })
 
       // Toggle featured
