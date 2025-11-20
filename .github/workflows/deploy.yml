@@ -60,7 +60,7 @@ jobs:
           key: ${{ secrets.SERVER_SSH_KEY }}
           port: ${{ secrets.SERVER_PORT }}
           source: "dist/*"
-          target: "/var/www/portfolio"
+          target: "/var/www/portfolio/frontend"
           strip_components: 1
           rm: true
 
@@ -72,6 +72,6 @@ jobs:
           key: ${{ secrets.SERVER_SSH_KEY }}
           port: ${{ secrets.SERVER_PORT }}
           script: |
-            cd /var/www/portfolio
+            cd /var/www/portfolio/frontend
             # Add any post-deployment commands here
             # e.g., restart nginx, pm2, etc.
