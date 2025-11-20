@@ -1,0 +1,20 @@
+#!/bin/bash
+# Fix for ENOSPC: System limit for number of file watchers reached
+
+echo "=== Fixing File Watcher Limit Issue ==="
+echo ""
+echo "Run these commands manually (requires sudo password):"
+echo ""
+echo "1. Increase the limit temporarily (until reboot):"
+echo "   echo 524288 | sudo tee /proc/sys/fs/inotify/max_user_watches"
+echo ""
+echo "2. Make it permanent (survives reboot):"
+echo "   echo 'fs.inotify.max_user_watches=524288' | sudo tee -a /etc/sysctl.conf"
+echo "   sudo sysctl -p"
+echo ""
+echo "3. Then restart Vite:"
+echo "   npm run dev"
+echo ""
+echo "=== Alternative: Close other applications ==="
+echo "Close any IDEs (VS Code, etc.) or file managers that might be watching files"
+echo ""
