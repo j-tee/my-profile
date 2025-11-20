@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/useAuth';
-import { FaUser, FaSignInAlt, FaUserPlus, FaSignOutAlt } from 'react-icons/fa';
+import { FaUser, FaSignInAlt, FaUserPlus, FaSignOutAlt, FaUserShield } from 'react-icons/fa';
 import './Navbar.css';
 
 const Navbar: React.FC = () => {
@@ -25,6 +25,12 @@ const Navbar: React.FC = () => {
           
           {isAuthenticated ? (
             <>
+              {(user?.role === 'super_admin' || user?.role === 'editor') && (
+                <Link to="/admin" className="navbar-link navbar-admin">
+                  <FaUserShield style={{ marginRight: '0.5rem' }} />
+                  Admin
+                </Link>
+              )}
               <Link to="/profile" className="navbar-link">
                 <FaUser style={{ marginRight: '0.5rem' }} />
                 {user?.first_name}
