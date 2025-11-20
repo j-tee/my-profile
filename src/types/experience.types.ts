@@ -18,19 +18,9 @@ export interface Experience {
   updatedAt: string;
 }
 
-export enum EmploymentType {
-  FULL_TIME = 'full_time',
-  PART_TIME = 'part_time',
-  CONTRACT = 'contract',
-  FREELANCE = 'freelance',
-  INTERNSHIP = 'internship',
-}
+export type EmploymentType = 'full_time' | 'part_time' | 'contract' | 'freelance' | 'internship';
 
-export enum LocationType {
-  ON_SITE = 'on_site',
-  REMOTE = 'remote',
-  HYBRID = 'hybrid',
-}
+export type LocationType = 'on_site' | 'remote' | 'hybrid';
 
 export interface CreateExperienceDTO {
   title: string;

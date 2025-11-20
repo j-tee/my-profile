@@ -40,13 +40,13 @@ const ProjectForm: React.FC = () => {
         title: project.title,
         description: project.description,
         technologies: project.technologies,
-        status: project.status,
-        start_date: project.start_date,
-        end_date: project.end_date || '',
-        github_url: project.github_url || '',
-        live_url: project.live_url || '',
-        image_url: project.image_url || '',
-        is_featured: project.is_featured,
+        status: project.current ? 'in_progress' : 'completed',
+        start_date: project.startDate,
+        end_date: project.endDate || '',
+        github_url: project.githubUrl || '',
+        live_url: project.projectUrl || '',
+        image_url: project.images?.[0]?.url || '',
+        is_featured: project.featured,
       });
     } catch (error) {
       console.error('Failed to load project:', error);
@@ -62,9 +62,9 @@ const ProjectForm: React.FC = () => {
     
     if (type === 'checkbox') {
       const checked = (e.target as HTMLInputElement).checked;
-      setFormData(prev => ({ ...prev, [name]: checked }));
+      setFormData((prev: ProjectRequest) => ({ ...prev, [name]: checked }));
     } else {
-      setFormData(prev => ({ ...prev, [name]: value }));
+      setFormData((prev: ProjectRequest) => ({ ...prev, [name]: value }));
     }
   };
 
@@ -73,7 +73,7 @@ const ProjectForm: React.FC = () => {
       e.preventDefault();
       const tech = techInput.trim();
       if (tech && !formData.technologies.includes(tech)) {
-        setFormData(prev => ({
+        setFormData((prev: ProjectRequest) => ({
           ...prev,
           technologies: [...prev.technologies, tech]
         }));
@@ -83,9 +83,9 @@ const ProjectForm: React.FC = () => {
   };
 
   const handleRemoveTechnology = (tech: string) => {
-    setFormData(prev => ({
+    setFormData((prev: ProjectRequest) => ({
       ...prev,
-      technologies: prev.technologies.filter(t => t !== tech)
+      technologies: prev.technologies.filter((t: string) => t !== tech)
     }));
   };
 
@@ -184,7 +184,7 @@ const ProjectForm: React.FC = () => {
               placeholder="Type and press Enter to add"
             />
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem', marginTop: '0.5rem' }}>
-              {formData.technologies.map((tech) => (
+              {formData.technologies.map((tech: string) => (
                 <span
                   key={tech}
                   style={{

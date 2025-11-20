@@ -11,25 +11,9 @@ export interface Skill {
   updatedAt: string;
 }
 
-export enum SkillCategory {
-  FRONTEND = 'frontend',
-  BACKEND = 'backend',
-  DATABASE = 'database',
-  DEVOPS = 'devops',
-  CLOUD = 'cloud',
-  MOBILE = 'mobile',
-  TESTING = 'testing',
-  TOOLS = 'tools',
-  SOFT_SKILLS = 'soft_skills',
-  OTHER = 'other',
-}
+export type SkillCategory = 'frontend' | 'backend' | 'database' | 'devops' | 'cloud' | 'mobile' | 'testing' | 'tools' | 'soft_skills' | 'other';
 
-export enum ProficiencyLevel {
-  BEGINNER = 'beginner',
-  INTERMEDIATE = 'intermediate',
-  ADVANCED = 'advanced',
-  EXPERT = 'expert',
-}
+export type ProficiencyLevel = 'beginner' | 'intermediate' | 'advanced' | 'expert';
 
 export interface CreateSkillDTO {
   name: string;

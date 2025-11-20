@@ -50,3 +50,16 @@ export interface CreateProjectDTO {
 }
 
 export interface UpdateProjectDTO extends Partial<CreateProjectDTO> {}
+
+export interface ProjectRequest {
+  title: string;
+  description: string;
+  technologies: string[];
+  status: 'in_progress' | 'completed' | 'on_hold';
+  start_date: string;
+  end_date?: string;
+  github_url?: string;
+  live_url?: string;
+  image_url?: string;
+  is_featured: boolean;
+}

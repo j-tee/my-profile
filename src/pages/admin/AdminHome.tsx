@@ -5,8 +5,7 @@ import {
   FaBriefcase, 
   FaGraduationCap, 
   FaCode,
-  FaEnvelope,
-  FaPlus
+  FaEnvelope
 } from 'react-icons/fa';
 import { projectsService, experiencesService, educationService, skillsService } from '../../services/portfolio.service';
 import '../admin/AdminDashboard.css';
