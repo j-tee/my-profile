@@ -2,6 +2,7 @@ import React, { useState, useEffect, type ReactNode } from 'react';
 import { authService } from '../services/auth.service';
 import { tokenManager } from '../services/api';
 import type { AuthContextType } from './AuthContext.types';
+import type { User, LoginRequest, RegisterRequest } from '../types/auth.types';
 import { AuthContext } from './AuthContext.context';
 
 interface AuthProviderProps {

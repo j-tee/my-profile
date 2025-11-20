@@ -186,3 +186,5 @@ export interface PaginatedResponse<T> {
   previous: string | null;
   results: T[];
 }
+
+export type ProjectRequest = import('./project.types').ProjectRequest;

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { FaSave, FaArrowLeft } from 'react-icons/fa';
 import { projectsService } from '../../services/portfolio.service';
-import type { ProjectRequest } from '../../types/portfolio.types';
+import type { ProjectRequest } from '../../types/project.types';
 import '../admin/AdminDashboard.css';
 
 const ProjectForm: React.FC = () => {
@@ -35,13 +35,13 @@ const ProjectForm: React.FC = () => {
           title: project.title,
           description: project.description,
           technologies: project.technologies,
-          status: project.current ? 'in_progress' : 'completed',
-          start_date: project.startDate,
-          end_date: project.endDate || '',
-          github_url: project.githubUrl || '',
-          live_url: project.projectUrl || '',
-          image_url: project.images?.[0]?.url || '',
-          is_featured: project.featured,
+          status: project.is_current ? 'in_progress' : 'completed',
+          start_date: project.start_date,
+          end_date: project.end_date || '',
+          github_url: project.github_url || '',
+          live_url: project.project_url || '',
+          image_url: project.image || '',
+          is_featured: project.is_featured,
         });
       } catch (error) {
         console.error('Failed to load project:', error);

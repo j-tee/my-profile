@@ -1,13 +1,13 @@
 import { apiClient } from './apiClient';
-import type { 
-  Skill, 
-  CreateSkillDTO, 
-  UpdateSkillDTO, 
+import type {
+  Skill,
+  CreateSkillDTO,
+  UpdateSkillDTO,
   ApiResponse,
   PaginatedResponse,
-  QueryParams
+  QueryParams,
+  SkillCategory,
 } from '../types';
-import { SkillCategory } from '../types';
 
 const SKILL_ENDPOINT = '/skills';
 
