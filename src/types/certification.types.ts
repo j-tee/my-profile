@@ -25,4 +25,4 @@ export interface CreateCertificationDTO {
   skills: string[];
 }
 
-export interface UpdateCertificationDTO extends Partial<CreateCertificationDTO> {}
+export type UpdateCertificationDTO = Partial<CreateCertificationDTO>;

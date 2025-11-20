@@ -27,12 +27,6 @@ const ProjectForm: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [loadingData, setLoadingData] = useState(isEdit);
 
-  useEffect(() => {
-    if (isEdit && id) {
-      loadProject(id);
-    }
-  }, [id, isEdit]);
-
   const loadProject = async (projectId: string) => {
     try {
       const project = await projectsService.get(projectId);
@@ -56,6 +50,12 @@ const ProjectForm: React.FC = () => {
       setLoadingData(false);
     }
   };
+
+  useEffect(() => {
+    if (isEdit && id) {
+      loadProject(id);
+    }
+  }, [id, isEdit, loadProject]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value, type } = e.target;

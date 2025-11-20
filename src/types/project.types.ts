@@ -49,7 +49,7 @@ export interface CreateProjectDTO {
   featured: boolean;
 }
 
-export interface UpdateProjectDTO extends Partial<CreateProjectDTO> {}
+export type UpdateProjectDTO = Partial<CreateProjectDTO>;
 
 export interface ProjectRequest {
   title: string;

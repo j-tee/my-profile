@@ -5,7 +5,7 @@ export type MessageStatus = 'new' | 'read' | 'in_progress' | 'responded' | 'arch
 // Contact Message Interface
 export interface ContactMessage {
   id: string;
-  sender: any; // Simplified for now
+  sender: unknown;
   sender_name: string;
   message_type: MessageType;
   subject: string;
@@ -16,7 +16,7 @@ export interface ContactMessage {
   status: MessageStatus;
   priority: boolean;
   admin_notes: string | null;
-  responded_by: any | null;
+  responded_by: unknown | null;
   replied_by_name: string | null;
   responded_at: string | null;
   reply_count: number;

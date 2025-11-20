@@ -22,4 +22,4 @@ export interface CreateSkillDTO {
   yearsOfExperience: number;
 }
 
-export interface UpdateSkillDTO extends Partial<CreateSkillDTO> {}
+export type UpdateSkillDTO = Partial<CreateSkillDTO>;

@@ -56,7 +56,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       tokenManager.setTokens(response.tokens.access, response.tokens.refresh);
       setUser(response.user);
     } catch (err: unknown) {
-      const error = err as any;
+      const error = err as { detail?: string; message?: string };
       const errorMessage = error.detail || error.message || 'Login failed. Please try again.';
       setError(errorMessage);
       throw err;
@@ -75,7 +75,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       tokenManager.setTokens(response.tokens.access, response.tokens.refresh);
       setUser(response.user);
     } catch (err: unknown) {
-      const error = err as any;
+      const error = err as { detail?: string; message?: string };
       const errorMessage = error.detail || error.message || 'Registration failed. Please try again';
       setError(errorMessage);
       throw err;
@@ -115,7 +115,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };
 
-export const useAuth = (): AuthContextType => {
+export function useAuth(): AuthContextType {
   const context = useContext(AuthContext);
   
   if (!context) {
@@ -123,4 +123,4 @@ export const useAuth = (): AuthContextType => {
   }
   
   return context;
-};
+}

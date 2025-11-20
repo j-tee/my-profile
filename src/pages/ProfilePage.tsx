@@ -49,7 +49,7 @@ const ProfilePage: React.FC = () => {
       const updatedUser = await authService.updateProfile(profileData);
       updateUser(updatedUser);
       showMessage('success', 'Profile updated successfully!');
-    } catch (err) {
+    } catch {
       showMessage('error', 'Failed to update profile');
     } finally {
       setLoading(false);
@@ -79,7 +79,7 @@ const ProfilePage: React.FC = () => {
         new_password: '',
         new_password_confirm: '',
       });
-    } catch (err) {
+    } catch {
       showMessage('error', 'Failed to change password');
     } finally {
       setLoading(false);
@@ -93,7 +93,7 @@ const ProfilePage: React.FC = () => {
       const setup = await authService.setupMFA();
       setMfaSetup(setup);
       showMessage('success', 'Scan the QR code with your authenticator app');
-    } catch (err) {
+    } catch {
       showMessage('error', 'Failed to setup MFA');
     } finally {
       setLoading(false);
@@ -114,7 +114,7 @@ const ProfilePage: React.FC = () => {
       showMessage('success', 'MFA enabled successfully!');
       setMfaSetup(null);
       setMfaToken('');
-    } catch (err) {
+    } catch {
       showMessage('error', 'Invalid MFA token');
     } finally {
       setLoading(false);
@@ -134,7 +134,7 @@ const ProfilePage: React.FC = () => {
       
       showMessage('success', 'MFA disabled successfully');
       setMfaPassword('');
-    } catch (err) {
+    } catch {
       showMessage('error', 'Failed to disable MFA. Check your password.');
     } finally {
       setLoading(false);

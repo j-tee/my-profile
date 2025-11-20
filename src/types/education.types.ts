@@ -29,4 +29,4 @@ export interface CreateEducationDTO {
   achievements?: string[];
 }
 
-export interface UpdateEducationDTO extends Partial<CreateEducationDTO> {}
+export type UpdateEducationDTO = Partial<CreateEducationDTO>;

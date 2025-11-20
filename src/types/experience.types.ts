@@ -37,4 +37,4 @@ export interface CreateExperienceDTO {
   technologies: string[];
 }
 
-export interface UpdateExperienceDTO extends Partial<CreateExperienceDTO> {}
+export type UpdateExperienceDTO = Partial<CreateExperienceDTO>;
