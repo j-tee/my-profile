@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { toast } from 'react-toastify';
 import { FaSave, FaArrowLeft } from 'react-icons/fa';
 import { projectService } from '../../services/project.service';
-import { PORTFOLIO_OWNER_PROFILE_ID } from '../../constants';
 import type { ProjectCreateRequest, ProjectDetail, ProjectMedia } from '../../types/project.types';
 import '../admin/AdminDashboard.css';
 
@@ -38,13 +36,16 @@ const ProjectForm: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [loadingData, setLoadingData] = useState(isEdit);
   const [mediaItems, setMediaItems] = useState<ProjectMedia[]>([]);
-  const [videoUrl, setVideoUrl] = useState<string>('');
-  const [captionInput, setCaptionInput] = useState<string>('');
+  // Commented out - not currently used but may be needed for future video URL feature
+  // const [videoUrl, setVideoUrl] = useState<string>('');
+  // const [captionInput, setCaptionInput] = useState<string>('');
   const [videoFile, setVideoFile] = useState<File | null>(null);
 
-  // Set portfolio owner profile ID
+  // Get profile ID from auth context or props (replace with actual implementation)
   useEffect(() => {
-    setFormData(prev => ({ ...prev, profile: PORTFOLIO_OWNER_PROFILE_ID }));
+    // TODO: Get actual profile ID from auth context
+    const profileId = 'your-profile-uuid'; // Replace with actual profile ID
+    setFormData(prev => ({ ...prev, profile: profileId }));
   }, []);
 
   useEffect(() => {
@@ -85,7 +86,7 @@ const ProjectForm: React.FC = () => {
         }
       } catch (error) {
         console.error('Failed to load project:', error);
-        toast.error('Failed to load project');
+        alert('Failed to load project');
         navigate('/admin/projects');
       } finally {
         setLoadingData(false);
@@ -120,19 +121,19 @@ const ProjectForm: React.FC = () => {
       const isVideo = file.type.startsWith('video/');
       
       if (type === 'image' && !isImage) {
-        toast.error('Please select image files only');
+        alert('Please select image files only');
         return;
       }
       
       if (type === 'video' && !isVideo) {
-        toast.error('Please select video files only');
+        alert('Please select video files only');
         return;
       }
       
       // Validate file size
       const maxSize = type === 'image' ? 5 * 1024 * 1024 : 50 * 1024 * 1024; // 5MB for images, 50MB for videos
       if (file.size > maxSize) {
-        toast.error(`${type === 'image' ? 'Image' : 'Video'} size must be less than ${maxSize / (1024 * 1024)}MB`);
+        alert(`${type === 'image' ? 'Image' : 'Video'} size must be less than ${maxSize / (1024 * 1024)}MB`);
         return;
       }
       
@@ -156,22 +157,78 @@ const ProjectForm: React.FC = () => {
     e.target.value = '';
   };
 
-  const getVideoThumbnail = (url: string): string => {
-    // Extract YouTube thumbnail
-    const youtubeMatch = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([^&]+)/);
-    if (youtubeMatch) {
-      return `https://img.youtube.com/vi/${youtubeMatch[1]}/maxresdefault.jpg`;
-    }
-    
-    // For other videos, use a placeholder
-    return 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="200" height="150"%3E%3Crect fill="%23ddd" width="200" height="150"/%3E%3Ctext x="50%25" y="50%25" dominant-baseline="middle" text-anchor="middle" fill="%23999" font-size="20"%3EVideo%3C/text%3E%3C/svg%3E';
-  };
+  // Commented out - not currently used but may be needed for future video URL feature
+  // const handleAddVideoUrl = () => {
+  //   if (!videoUrl.trim()) return;
+  //   
+  //   // Validate video URL (YouTube, Vimeo, direct links)
+  //   const videoPatterns = [
+  //     /youtube\.com\/watch\?v=/,
+  //     /youtu\.be\//,
+  //     /vimeo\.com\//,
+  //     /\.mp4$/,
+  //     /\.webm$/,
+  //     /\.mov$/
+  //   ];
+  //   
+  //   const isValid = videoPatterns.some(pattern => pattern.test(videoUrl));
+  //   if (!isValid) {
+  //     alert('Please enter a valid video URL (YouTube, Vimeo, or direct video link)');
+  //     return;
+  //   }
+  //   
+  //   const newItem = {
+  //     id: `${Date.now()}-${Math.random()}`,
+  //     type: 'video' as const,
+  //     url: videoUrl,
+  //     preview: getVideoThumbnail(videoUrl),
+  //     caption: captionInput
+  //   };
+  //   
+  //   setMediaItems((prev) => [...prev, newItem]);
+  //   setVideoUrl('');
+  //   setCaptionInput('');
+  // };
+
+  // Commented out - not currently used but may be needed for future video URL feature
+  // const getVideoThumbnail = (url: string): string => {
+  //   // Extract YouTube thumbnail
+  //   const youtubeMatch = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([^&]+)/);
+  //   if (youtubeMatch) {
+  //     return `https://img.youtube.com/vi/${youtubeMatch[1]}/maxresdefault.jpg`;
+  //   }
+  //   
+  //   // For other videos, use a placeholder
+  //   return 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="200" height="150"%3E%3Crect fill="%23ddd" width="200" height="150"/%3E%3Ctext x="50%25" y="50%25" dominant-baseline="middle" text-anchor="middle" fill="%23999" font-size="20"%3EVideo%3C/text%3E%3C/svg%3E';
+  // };
 
   const removeMedia = (id: string) => {
     setMediaItems((prev) => prev.filter((item) => item.id !== id));
   };
 
-  const moveMedia = (id: string, direction: 'up' | 'down') => {Element> | React.FormEvent) => {
+  // Commented out - not currently used but may be needed for future caption editing feature
+  // const updateCaption = (id: string, caption: string) => {
+  //   setMediaItems((prev) =>
+  //     prev.map((item) => (item.id === id ? { ...item, caption } : item))
+  //   );
+  // };
+
+  // Commented out - not currently used but may be needed for future media reordering feature
+  // const moveMedia = (id: string, direction: 'up' | 'down') => {
+  //   setMediaItems((prev) => {
+  //     const index = prev.findIndex((item) => item.id === id);
+  //     if (index === -1) return prev;
+  //     
+  //     const newIndex = direction === 'up' ? index - 1 : index + 1;
+  //     if (newIndex < 0 || newIndex >= prev.length) return prev;
+  //     
+  //     const newItems = [...prev];
+  //     [newItems[index], newItems[newIndex]] = [newItems[newIndex], newItems[index]];
+  //     return newItems;
+  //   });
+  // };
+
+  const handleAddTechnology = (e: React.KeyboardEvent<HTMLInputElement> | React.FormEvent) => {
     if ('key' in e && e.key === 'Enter') {
       e.preventDefault();
       const tech = techInput.trim();
@@ -220,7 +277,7 @@ const ProjectForm: React.FC = () => {
     try {
       // Validate required fields
       if (!formData.profile) {
-        toast.error('Profile ID is required');
+        alert('Profile ID is required');
         return;
       }
 
@@ -247,14 +304,14 @@ const ProjectForm: React.FC = () => {
       }
 
       console.log('Project saved:', savedProject);
-      toast.success('Project saved successfully!');
+      alert('Project saved successfully!');
       navigate('/admin/projects');
     } catch (error) {
       console.error('Failed to save project:', error);
       const errorMessage = error && typeof error === 'object' && 'message' in error 
         ? (error as { message: string }).message 
         : 'Failed to save project. Please check all required fields.';
-      toast.error(errorMessage);
+      alert(errorMessage);
     } finally {
       setLoading(false);
     }

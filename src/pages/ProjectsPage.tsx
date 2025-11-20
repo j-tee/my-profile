@@ -12,25 +12,27 @@ const ProjectsPage = () => {
   const [filter, setFilter] = useState<'all' | 'featured'>('all');
 
   useEffect(() => {
-    fetchProjects();
-  }, [filter, fetchProjects]);
-
-  const fetchProjects = async () => {
-    try {
-      setLoading(true);
-      if (filter === 'featured') {
-        const data = await projectService.getFeaturedProjects();
-        setProjects(data);
-      } else {
-        const data = await projectService.getProjectsByProfile(PORTFOLIO_OWNER_PROFILE_ID);
-        setProjects(data.results);
+    const fetchProjects = async () => {
+      try {
+        setLoading(true);
+        if (filter === 'featured') {
+          const data = await projectService.getFeaturedProjects();
+          // getFeaturedProjects returns ProjectDetail[], but we need ProjectListItem[]
+          // Use type assertion since both types are compatible for display
+          setProjects(data as unknown as ProjectListItem[]);
+        } else {
+          const data = await projectService.getProjectsByProfile(PORTFOLIO_OWNER_PROFILE_ID);
+          setProjects(data.results);
+        }
+      } catch (error) {
+        console.error('Failed to fetch projects:', error);
+      } finally {
+        setLoading(false);
       }
-    } catch (error) {
-      console.error('Failed to fetch projects:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
+    };
+    
+    fetchProjects();
+  }, [filter]);
 
   if (loading) {
     return (

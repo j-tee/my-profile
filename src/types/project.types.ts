@@ -133,5 +133,5 @@ export type ProjectRequestWithMedia = ProjectRequest & {
   video_url?: string;
 };
 
-export interface CreateProjectDTO extends ProjectCreateRequest {}
+export type CreateProjectDTO = ProjectCreateRequest;
 export type UpdateProjectDTO = ProjectUpdateRequest;
