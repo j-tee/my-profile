@@ -271,28 +271,31 @@ const ProjectForm: React.FC = () => {
             </div>
           </div>
 
-          <div className="form-group">
-            <label htmlFor="image_url">Image URL</label>
-            <input
-              type="url"
-              id="image_url"
-              name="image_url"
-              value={formData.image_url}
-              onChange={handleChange}
-              placeholder="https://example.com/image.jpg"
-            />
-          </div>
-
-          <div className="form-group">
-            <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', cursor: 'pointer' }}>
+          <div className="form-row">
+            <div className="form-group">
+              <label htmlFor="image_url">Image URL</label>
               <input
-                type="checkbox"
-                name="is_featured"
-                checked={formData.is_featured}
+                type="url"
+                id="image_url"
+                name="image_url"
+                value={formData.image_url}
                 onChange={handleChange}
+                placeholder="https://example.com/image.jpg"
               />
-              <span>Featured Project</span>
-            </label>
+            </div>
+
+            <div className="form-group">
+              <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', cursor: 'pointer' }}>
+                <input
+                  type="checkbox"
+                  name="is_featured"
+                  checked={formData.is_featured}
+                  onChange={handleChange}
+                  style={{ width: 'auto' }}
+                />
+                <span>Featured Project</span>
+              </label>
+            </div>
           </div>
 
           <div className="form-actions">
