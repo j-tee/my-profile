@@ -32,11 +32,13 @@ const ProjectForm: React.FC = () => {
     const loadProject = async (projectId: string) => {
       try {
         const project: PortfolioProject = await projectsService.get(projectId);
+        const mappedStatus: ProjectRequest['status'] =
+          project.status === 'planned' ? 'in_progress' : project.status;
         setFormData({
           title: project.title,
           description: project.description,
           technologies: project.technologies,
-          status: project.is_current ? 'in_progress' : 'completed',
+          status: mappedStatus,
           start_date: project.start_date,
           end_date: project.end_date || '',
           github_url: project.github_url || '',
