@@ -305,8 +305,10 @@ curl -X POST http://localhost:8000/api/auth/mfa/verify/ \
 Access Django admin at: `http://localhost:8000/admin/`
 
 **Super Admin Credentials:**
-- Email: `admin@portfolio.com`
-- Password: `admin123`
+- Email: `juliustetteh@gmail.com`
+- Password: `pa$$word123`
+
+⚠️ **Security Note**: Change the default password after first login!
 
 **Admin Capabilities:**
 - Manage all users
