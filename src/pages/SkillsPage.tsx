@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { FaStar, FaCode, FaTools, FaComments } from 'react-icons/fa';
 import { skillService } from '../services/skill.service';
 import type { Skill } from '../types/skill.types';
+import { PORTFOLIO_OWNER_PROFILE_ID } from '../constants';
 import './HomePage.css';
 
 const SkillsPage = () => {
@@ -16,7 +17,7 @@ const SkillsPage = () => {
 
   const fetchSkills = async () => {
     try {
-      const data = await skillService.getSkills();
+      const data = await skillService.getSkills(PORTFOLIO_OWNER_PROFILE_ID);
       setSkills(data.results);
     } catch (error) {
       console.error('Failed to fetch skills:', error);
@@ -131,8 +132,8 @@ const SkillsPage = () => {
                     <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '1rem' }}>
                       <div style={{
                         fontSize: '1.5rem',
-                        color: getProficiencyColor(skill.proficiency_level),
-                        background: `${getProficiencyColor(skill.proficiency_level)}20`,
+                        color: getProficiencyColor(skill.proficiencyLevel),
+                        background: `${getProficiencyColor(skill.proficiencyLevel)}20`,
                         padding: '0.75rem',
                         borderRadius: '8px',
                       }}>
@@ -154,8 +155,8 @@ const SkillsPage = () => {
                         <span style={{ fontSize: '0.875rem', color: '#4a5568', fontWeight: 600 }}>
                           Proficiency
                         </span>
-                        <span style={{ fontSize: '0.875rem', color: getProficiencyColor(skill.proficiency_level), fontWeight: 600 }}>
-                          {skill.proficiency_level}
+                        <span style={{ fontSize: '0.875rem', color: getProficiencyColor(skill.proficiencyLevel), fontWeight: 600 }}>
+                          {skill.proficiencyLevel}
                         </span>
                       </div>
                       <div style={{
@@ -167,31 +168,19 @@ const SkillsPage = () => {
                       }}>
                         <motion.div
                           initial={{ width: 0 }}
-                          animate={{ width: getProficiencyWidth(skill.proficiency_level) }}
+                          animate={{ width: getProficiencyWidth(skill.proficiencyLevel) }}
                           transition={{ duration: 0.8, delay: index * 0.05 + 0.2 }}
                           style={{
                             height: '100%',
-                            background: getProficiencyColor(skill.proficiency_level),
+                            background: getProficiencyColor(skill.proficiencyLevel),
                             borderRadius: '4px',
                           }}
                         />
                       </div>
                     </div>
 
-                    {/* Description */}
-                    {skill.description && (
-                      <p style={{
-                        color: '#4a5568',
-                        fontSize: '0.875rem',
-                        lineHeight: 1.6,
-                        marginBottom: '1rem',
-                      }}>
-                        {skill.description}
-                      </p>
-                    )}
-
                     {/* Years of Experience */}
-                    {skill.years_of_experience && (
+                    {skill.yearsOfExperience > 0 && (
                       <div style={{
                         display: 'inline-flex',
                         alignItems: 'center',
@@ -204,7 +193,7 @@ const SkillsPage = () => {
                         fontWeight: 500,
                       }}>
                         <FaStar style={{ color: '#f6ad55' }} />
-                        {skill.years_of_experience} {skill.years_of_experience === 1 ? 'year' : 'years'} of experience
+                        {skill.yearsOfExperience} {skill.yearsOfExperience === 1 ? 'year' : 'years'} of experience
                       </div>
                     )}
                   </motion.div>

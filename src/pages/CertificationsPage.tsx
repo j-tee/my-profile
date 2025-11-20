@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { FaCertificate, FaExternalLinkAlt, FaCalendar, FaCheckCircle } from 'react-icons/fa';
 import { certificationService } from '../services/certification.service';
 import type { Certification } from '../types/certification.types';
+import { PORTFOLIO_OWNER_PROFILE_ID } from '../constants';
 import './HomePage.css';
 
 const CertificationsPage = () => {
@@ -15,7 +16,7 @@ const CertificationsPage = () => {
 
   const fetchCertifications = async () => {
     try {
-      const data = await certificationService.getCertifications();
+      const data = await certificationService.getCertifications(PORTFOLIO_OWNER_PROFILE_ID);
       setCertifications(data.results);
     } catch (error) {
       console.error('Failed to fetch certifications:', error);
@@ -103,10 +104,10 @@ const CertificationsPage = () => {
                           {cert.name}
                         </h3>
                         <p style={{ margin: 0, color: '#4a5568', fontWeight: 600 }}>
-                          {cert.issuing_organization}
+                          {cert.issuer}
                         </p>
                       </div>
-                      {!cert.expiration_date && (
+                      {!cert.expirationDate && (
                         <div style={{
                           display: 'flex',
                           alignItems: 'center',
@@ -129,21 +130,21 @@ const CertificationsPage = () => {
                       <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: '#718096', fontSize: '0.875rem', marginBottom: '0.5rem' }}>
                         <FaCalendar />
                         <span>
-                          Issued: {new Date(cert.issue_date).toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}
+                          Issued: {new Date(cert.issueDate).toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}
                         </span>
                       </div>
-                      {cert.expiration_date && (
+                      {cert.expirationDate && (
                         <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: '#718096', fontSize: '0.875rem' }}>
                           <FaCalendar />
                           <span>
-                            Expires: {new Date(cert.expiration_date).toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}
+                            Expires: {new Date(cert.expirationDate).toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}
                           </span>
                         </div>
                       )}
                     </div>
 
                     {/* Credential ID */}
-                    {cert.credential_id && (
+                    {cert.credentialId && (
                       <div style={{
                         padding: '1rem',
                         background: '#f7fafc',
@@ -154,7 +155,7 @@ const CertificationsPage = () => {
                           Credential ID
                         </span>
                         <p style={{ margin: '0.25rem 0 0', color: '#2d3748', fontFamily: 'monospace', fontSize: '0.875rem' }}>
-                          {cert.credential_id}
+                          {cert.credentialId}
                         </p>
                       </div>
                     )}
@@ -198,9 +199,9 @@ const CertificationsPage = () => {
                     )}
 
                     {/* Credential URL */}
-                    {cert.credential_url && (
+                    {cert.credentialUrl && (
                       <a
-                        href={cert.credential_url}
+                        href={cert.credentialUrl}
                         target="_blank"
                         rel="noopener noreferrer"
                         style={{

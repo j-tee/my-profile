@@ -3,7 +3,6 @@ import type {
   Education, 
   CreateEducationDTO, 
   UpdateEducationDTO, 
-  ApiResponse,
   PaginatedResponse,
   QueryParams 
 } from '../types';
@@ -15,38 +14,38 @@ export const educationService = {
    * Get all education records for a profile
    */
   getEducation: async (profileId: string, params?: QueryParams): Promise<PaginatedResponse<Education>> => {
-    const response = await apiClient.get<ApiResponse<PaginatedResponse<Education>>>(
+    const response = await apiClient.get<PaginatedResponse<Education>>(
       EDUCATION_ENDPOINT,
       { params: { ...params, profile_id: profileId } }
     );
-    return response.data.data;
+    return response.data;
   },
 
   /**
    * Get education by ID
    */
   getEducationById: async (id: string): Promise<Education> => {
-    const response = await apiClient.get<ApiResponse<Education>>(`${EDUCATION_ENDPOINT}/${id}`);
-    return response.data.data;
+    const response = await apiClient.get<Education>(`${EDUCATION_ENDPOINT}/${id}`);
+    return response.data;
   },
 
   /**
    * Create new education record
    */
   createEducation: async (data: CreateEducationDTO): Promise<Education> => {
-    const response = await apiClient.post<ApiResponse<Education>>(EDUCATION_ENDPOINT, data);
-    return response.data.data;
+    const response = await apiClient.post<Education>(EDUCATION_ENDPOINT, data);
+    return response.data;
   },
 
   /**
    * Update education record
    */
   updateEducation: async (id: string, data: UpdateEducationDTO): Promise<Education> => {
-    const response = await apiClient.patch<ApiResponse<Education>>(
+    const response = await apiClient.patch<Education>(
       `${EDUCATION_ENDPOINT}/${id}`,
       data
     );
-    return response.data.data;
+    return response.data;
   },
 
   /**

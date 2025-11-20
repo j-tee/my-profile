@@ -3,7 +3,6 @@ import type {
   Certification, 
   CreateCertificationDTO, 
   UpdateCertificationDTO, 
-  ApiResponse,
   PaginatedResponse,
   QueryParams 
 } from '../types';
@@ -18,43 +17,43 @@ export const certificationService = {
     profileId: string, 
     params?: QueryParams
   ): Promise<PaginatedResponse<Certification>> => {
-    const response = await apiClient.get<ApiResponse<PaginatedResponse<Certification>>>(
+    const response = await apiClient.get<PaginatedResponse<Certification>>(
       CERTIFICATION_ENDPOINT,
       { params: { ...params, profile_id: profileId } }
     );
-    return response.data.data;
+    return response.data;
   },
 
   /**
    * Get active certifications (not expired)
    */
   getActiveCertifications: async (profileId: string): Promise<Certification[]> => {
-    const response = await apiClient.get<ApiResponse<Certification[]>>(
+    const response = await apiClient.get<Certification[]>(
       `${CERTIFICATION_ENDPOINT}/active`,
       { params: { profile_id: profileId } }
     );
-    return response.data.data;
+    return response.data;
   },
 
   /**
    * Get certification by ID
    */
   getCertificationById: async (id: string): Promise<Certification> => {
-    const response = await apiClient.get<ApiResponse<Certification>>(
+    const response = await apiClient.get<Certification>(
       `${CERTIFICATION_ENDPOINT}/${id}`
     );
-    return response.data.data;
+    return response.data;
   },
 
   /**
    * Create new certification
    */
   createCertification: async (data: CreateCertificationDTO): Promise<Certification> => {
-    const response = await apiClient.post<ApiResponse<Certification>>(
+    const response = await apiClient.post<Certification>(
       CERTIFICATION_ENDPOINT,
       data
     );
-    return response.data.data;
+    return response.data;
   },
 
   /**
@@ -64,11 +63,11 @@ export const certificationService = {
     id: string,
     data: UpdateCertificationDTO
   ): Promise<Certification> => {
-    const response = await apiClient.patch<ApiResponse<Certification>>(
+    const response = await apiClient.patch<Certification>(
       `${CERTIFICATION_ENDPOINT}/${id}`,
       data
     );
-    return response.data.data;
+    return response.data;
   },
 
   /**
@@ -82,11 +81,11 @@ export const certificationService = {
    * Verify certification
    */
   verifyCertification: async (id: string, credentialId: string): Promise<boolean> => {
-    const response = await apiClient.post<ApiResponse<{ valid: boolean }>>(
+    const response = await apiClient.post<{ valid: boolean }>(
       `${CERTIFICATION_ENDPOINT}/${id}/verify`,
       { credential_id: credentialId }
     );
-    return response.data.data.valid;
+    return response.data.valid;
   },
 
   /**

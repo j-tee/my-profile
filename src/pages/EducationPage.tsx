@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { FaGraduationCap, FaCalendar, FaMapMarkerAlt } from 'react-icons/fa';
 import { educationService } from '../services/education.service';
 import type { Education } from '../types/education.types';
+import { PORTFOLIO_OWNER_PROFILE_ID } from '../constants';
 import './HomePage.css';
 
 const EducationPage = () => {
@@ -15,7 +16,7 @@ const EducationPage = () => {
 
   const fetchEducation = async () => {
     try {
-      const data = await educationService.getEducations();
+      const data = await educationService.getEducation(PORTFOLIO_OWNER_PROFILE_ID);
       setEducation(data.results);
     } catch (error) {
       console.error('Failed to fetch education:', error);
