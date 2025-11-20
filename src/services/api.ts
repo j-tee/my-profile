@@ -1,6 +1,19 @@
 import axios, { type AxiosInstance, AxiosError, type InternalAxiosRequestConfig } from 'axios';
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000/api';
+const resolveApiBaseUrl = () => {
+  if (import.meta.env.VITE_API_BASE_URL) {
+    return import.meta.env.VITE_API_BASE_URL;
+  }
+
+  const host = typeof window !== 'undefined' ? window.location.hostname : '';
+  if (host && host.endsWith('alphalogiquetechnologies.com')) {
+    return 'https://profileapi.alphalogiquetechnologies.com/';
+  }
+
+  return 'http://localhost:8000/api';
+};
+
+const API_BASE_URL = resolveApiBaseUrl();
 
 // Create axios instance
 const apiClient: AxiosInstance = axios.create({
