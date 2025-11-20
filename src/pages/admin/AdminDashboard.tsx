@@ -11,7 +11,8 @@ import {
   FaEnvelope,
   FaChartBar,
   FaBars,
-  FaTimes
+  FaTimes,
+  FaUsers
 } from 'react-icons/fa';
 import './AdminDashboard.css';
 
@@ -27,6 +28,7 @@ const AdminDashboard: React.FC = () => {
     { path: '/admin/education', icon: <FaGraduationCap />, label: 'Education' },
     { path: '/admin/skills', icon: <FaCode />, label: 'Skills' },
     { path: '/admin/certifications', icon: <FaCertificate />, label: 'Certifications' },
+    { path: '/admin/users', icon: <FaUsers />, label: 'Users', adminOnly: true },
     { path: '/admin/messages', icon: <FaEnvelope />, label: 'Messages' },
   ];
 
@@ -64,16 +66,18 @@ const AdminDashboard: React.FC = () => {
         </div>
 
         <nav className="sidebar-nav">
-          {menuItems.map((item) => (
-            <Link
-              key={item.path}
-              to={item.path}
-              className={`nav-item ${isActive(item.path, item.exact) ? 'active' : ''}`}
-            >
-              <span className="nav-icon">{item.icon}</span>
-              {sidebarOpen && <span className="nav-label">{item.label}</span>}
-            </Link>
-          ))}
+          {menuItems
+            .filter((item) => !('adminOnly' in item) || (item.adminOnly && user?.role === 'super_admin'))
+            .map((item) => (
+              <Link
+                key={item.path}
+                to={item.path}
+                className={`nav-item ${isActive(item.path, item.exact) ? 'active' : ''}`}
+              >
+                <span className="nav-icon">{item.icon}</span>
+                {sidebarOpen && <span className="nav-label">{item.label}</span>}
+              </Link>
+            ))}
         </nav>
 
         <div className="sidebar-footer">

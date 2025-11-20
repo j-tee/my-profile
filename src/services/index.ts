@@ -5,3 +5,5 @@ export { educationService } from './education.service';
 export { skillService } from './skill.service';
 export { projectService } from './project.service';
 export { certificationService } from './certification.service';
+export { userService } from './user.service';
+export { authService } from './auth.service';

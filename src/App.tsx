@@ -6,6 +6,13 @@ import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
 import ProfilePage from './pages/ProfilePage';
 import ProtectedRoute from './components/ProtectedRoute';
+import AdminRoute from './components/AdminRoute';
+import AdminDashboard from './pages/admin/AdminDashboard';
+import AdminHome from './pages/admin/AdminHome';
+import ProjectsList from './pages/admin/ProjectsList';
+import ProjectForm from './pages/admin/ProjectForm';
+import UsersList from './pages/admin/UsersList';
+import UserForm from './pages/admin/UserForm';
 import './App.css';
 
 // Placeholder components - will be implemented
@@ -33,6 +40,25 @@ function App() {
               </ProtectedRoute>
             }
           />
+          
+          {/* Admin Routes */}
+          <Route
+            path="/admin"
+            element={
+              <AdminRoute>
+                <AdminDashboard />
+              </AdminRoute>
+            }
+          >
+            <Route index element={<AdminHome />} />
+            <Route path="projects" element={<ProjectsList />} />
+            <Route path="projects/new" element={<ProjectForm />} />
+            <Route path="projects/:id/edit" element={<ProjectForm />} />
+            <Route path="users" element={<UsersList />} />
+            <Route path="users/new" element={<UserForm />} />
+            <Route path="users/:id/edit" element={<UserForm />} />
+          </Route>
+          
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </div>
