@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import { FaPlus, FaEdit, FaTrash, FaCheck, FaTimes, FaSearch, FaUserShield, FaUserEdit, FaUserCheck } from 'react-icons/fa';
 import { userService } from '../../services/user.service';
 import { useAuth } from '../../contexts/useAuth';
@@ -52,7 +53,7 @@ const UsersList: React.FC = () => {
       loadUsers();
     } catch (error) {
       console.error('Failed to delete user:', error);
-      alert('Failed to delete user');
+      toast.error('Failed to delete user');
     }
   };
 
@@ -66,7 +67,7 @@ const UsersList: React.FC = () => {
       loadUsers();
     } catch (error) {
       console.error('Failed to toggle user status:', error);
-      alert('Failed to update user status');
+      toast.error('Failed to update user status');
     }
   };
 

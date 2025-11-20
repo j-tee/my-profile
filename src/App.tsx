@@ -5,6 +5,11 @@ import HomePage from './pages/HomePage';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
 import ProfilePage from './pages/ProfilePage';
+import ProjectsPage from './pages/ProjectsPage';
+import EducationPage from './pages/EducationPage';
+import ExperiencePage from './pages/ExperiencePage';
+import SkillsPage from './pages/SkillsPage';
+import CertificationsPage from './pages/CertificationsPage';
 import ProtectedRoute from './components/ProtectedRoute';
 import AdminRoute from './components/AdminRoute';
 import AdminDashboard from './pages/admin/AdminDashboard';
@@ -29,7 +34,15 @@ function App() {
       <Navbar />
       <div className="app">
         <Routes>
+          {/* Public Routes */}
           <Route path={ROUTES.HOME} element={<HomePage />} />
+          <Route path="/projects" element={<ProjectsPage />} />
+          <Route path="/education" element={<EducationPage />} />
+          <Route path="/experience" element={<ExperiencePage />} />
+          <Route path="/skills" element={<SkillsPage />} />
+          <Route path="/certifications" element={<CertificationsPage />} />
+          
+          {/* Auth Routes */}
           <Route path={ROUTES.LOGIN} element={<LoginPage />} />
           <Route path={ROUTES.REGISTER} element={<RegisterPage />} />
           <Route

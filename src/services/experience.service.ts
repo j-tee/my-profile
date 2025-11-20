@@ -1,4 +1,4 @@
-import { apiClient } from './apiClient';
+import apiClient from './api';
 import type { 
   Experience, 
   CreateExperienceDTO, 

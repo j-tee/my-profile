@@ -1,6 +1,7 @@
 import { createSlice, createAsyncThunk, type PayloadAction } from '@reduxjs/toolkit';
 import type { 
-  Project, 
+  ProjectDetail,
+  ProjectListItem,
   CreateProjectDTO, 
   UpdateProjectDTO, 
   PaginatedResponse,
@@ -9,9 +10,9 @@ import type {
 import { projectService } from '../../services';
 
 export interface ProjectState {
-  projects: Project[];
-  featuredProjects: Project[];
-  currentProject: Project | null;
+  projects: ProjectListItem[];
+  featuredProjects: ProjectDetail[];
+  currentProject: ProjectDetail | null;
   pagination: {
     count: number;
     next: string | null;
@@ -37,30 +38,39 @@ const initialState: ProjectState = {
 
 // Async thunks
 export const fetchProjects = createAsyncThunk<
-  PaginatedResponse<Project>,
+  PaginatedResponse<ProjectListItem>,
   { profileId: string; page?: number },
   { rejectValue: ApiError }
 >('project/fetchProjects', async ({ profileId, page = 1 }, { rejectWithValue }) => {
   try {
-    return await projectService.getProjects(profileId, { page });
+    const result = await projectService.getProjectsByProfile(profileId, { page });
+    return {
+      results: result.results,
+      count: result.count,
+      next: result.next,
+      previous: result.previous,
+      page,
+      pageSize: 10,
+      totalPages: Math.ceil(result.count / 10),
+    };
   } catch (error) {
     return rejectWithValue(error as ApiError);
   }
 });
 
 export const fetchFeaturedProjects = createAsyncThunk<
-  Project[],
-  string,
+  ProjectDetail[],
+  void,
   { rejectValue: ApiError }
->('project/fetchFeaturedProjects', async (profileId, { rejectWithValue }) => {
+>('project/fetchFeaturedProjects', async (_, { rejectWithValue }) => {
   try {
-    return await projectService.getFeaturedProjects(profileId);
+    return await projectService.getFeaturedProjects();
   } catch (error) {
     return rejectWithValue(error as ApiError);
   }
 });
 
-export const fetchProjectById = createAsyncThunk<Project, string, { rejectValue: ApiError }>(
+export const fetchProjectById = createAsyncThunk<ProjectDetail, string, { rejectValue: ApiError }>(
   'project/fetchProjectById',
   async (id, { rejectWithValue }) => {
     try {
@@ -72,24 +82,24 @@ export const fetchProjectById = createAsyncThunk<Project, string, { rejectValue:
 );
 
 export const createProject = createAsyncThunk<
-  Project,
+  ProjectDetail,
   CreateProjectDTO,
   { rejectValue: ApiError }
 >('project/createProject', async (data, { rejectWithValue }) => {
   try {
-    return await projectService.createProject(data);
+    return await projectService.createProject(data, undefined, undefined);
   } catch (error) {
     return rejectWithValue(error as ApiError);
   }
 });
 
 export const updateProject = createAsyncThunk<
-  Project,
+  ProjectDetail,
   { id: string; data: UpdateProjectDTO },
   { rejectValue: ApiError }
 >('project/updateProject', async ({ id, data }, { rejectWithValue }) => {
   try {
-    return await projectService.updateProject(id, data);
+    return await projectService.updateProject(id, data, undefined);
   } catch (error) {
     return rejectWithValue(error as ApiError);
   }
@@ -107,11 +117,13 @@ export const deleteProject = createAsyncThunk<string, string, { rejectValue: Api
   }
 );
 
-export const toggleFeatured = createAsyncThunk<Project, string, { rejectValue: ApiError }>(
+export const toggleFeatured = createAsyncThunk<ProjectDetail, string, { rejectValue: ApiError }>(
   'project/toggleFeatured',
   async (id, { rejectWithValue }) => {
     try {
-      return await projectService.toggleFeatured(id);
+      // Fetch current project and toggle featured status
+      const project = await projectService.getProjectById(id);
+      return await projectService.updateProject(id, { featured: !project.featured }, undefined);
     } catch (error) {
       return rejectWithValue(error as ApiError);
     }
@@ -139,7 +151,7 @@ const projectSlice = createSlice({
       })
       .addCase(
         fetchProjects.fulfilled,
-        (state, action: PayloadAction<PaginatedResponse<Project>>) => {
+        (state, action: PayloadAction<PaginatedResponse<ProjectDetail>>) => {
           state.loading = false;
           state.projects = action.payload.results;
           state.pagination = {
@@ -154,20 +166,20 @@ const projectSlice = createSlice({
       )
       .addCase(fetchProjects.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload || null;
+        state.error = action.payload ?? null;
       })
 
       // Fetch featured projects
       .addCase(fetchFeaturedProjects.pending, (state) => {
         state.loading = true;
       })
-      .addCase(fetchFeaturedProjects.fulfilled, (state, action: PayloadAction<Project[]>) => {
+      .addCase(fetchFeaturedProjects.fulfilled, (state, action: PayloadAction<ProjectDetail[]>) => {
         state.loading = false;
         state.featuredProjects = action.payload;
       })
       .addCase(fetchFeaturedProjects.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload || null;
+        state.error = action.payload ?? null;
       })
 
       // Fetch project by ID
@@ -175,13 +187,13 @@ const projectSlice = createSlice({
         state.loading = true;
         state.error = null;
       })
-      .addCase(fetchProjectById.fulfilled, (state, action: PayloadAction<Project>) => {
+      .addCase(fetchProjectById.fulfilled, (state, action: PayloadAction<ProjectDetail>) => {
         state.loading = false;
         state.currentProject = action.payload;
       })
       .addCase(fetchProjectById.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload || null;
+        state.error = action.payload ?? null;
       })
 
       // Create project
@@ -189,13 +201,13 @@ const projectSlice = createSlice({
         state.actionLoading = true;
         state.error = null;
       })
-      .addCase(createProject.fulfilled, (state, action: PayloadAction<Project>) => {
+      .addCase(createProject.fulfilled, (state, action: PayloadAction<ProjectDetail>) => {
         state.actionLoading = false;
-        state.projects.unshift(action.payload);
+        state.projects.unshift(action.payload as unknown as ProjectListItem);
       })
       .addCase(createProject.rejected, (state, action) => {
         state.actionLoading = false;
-        state.error = action.payload || null;
+        state.error = action.payload ?? null;
       })
 
       // Update project
@@ -203,11 +215,11 @@ const projectSlice = createSlice({
         state.actionLoading = true;
         state.error = null;
       })
-      .addCase(updateProject.fulfilled, (state, action: PayloadAction<Project>) => {
+      .addCase(updateProject.fulfilled, (state, action: PayloadAction<ProjectDetail>) => {
         state.actionLoading = false;
         const index = state.projects.findIndex((proj) => proj.id === action.payload.id);
         if (index !== -1) {
-          state.projects[index] = action.payload;
+          state.projects[index] = action.payload as unknown as ProjectListItem;
         }
         if (state.currentProject?.id === action.payload.id) {
           state.currentProject = action.payload;
@@ -215,7 +227,7 @@ const projectSlice = createSlice({
       })
       .addCase(updateProject.rejected, (state, action) => {
         state.actionLoading = false;
-        state.error = action.payload || null;
+        state.error = action.payload ?? null;
       })
 
       // Delete project
@@ -229,14 +241,14 @@ const projectSlice = createSlice({
       })
       .addCase(deleteProject.rejected, (state, action) => {
         state.actionLoading = false;
-        state.error = action.payload || null;
+        state.error = action.payload ?? null;
       })
 
       // Toggle featured
-      .addCase(toggleFeatured.fulfilled, (state, action: PayloadAction<Project>) => {
+      .addCase(toggleFeatured.fulfilled, (state, action: PayloadAction<ProjectDetail>) => {
         const index = state.projects.findIndex((proj) => proj.id === action.payload.id);
         if (index !== -1) {
-          state.projects[index] = action.payload;
+          state.projects[index] = action.payload as unknown as ProjectListItem;
         }
       });
   },

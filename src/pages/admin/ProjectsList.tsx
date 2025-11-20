@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import { FaPlus, FaEdit, FaTrash, FaEye } from 'react-icons/fa';
-import { projectsService } from '../../services/portfolio.service';
-import type { Project } from '../../types/portfolio.types';
+import { projectService } from '../../services/project.service';
+import { PORTFOLIO_OWNER_PROFILE_ID } from '../../constants';
+import type { ProjectListItem } from '../../types/project.types';
 import '../admin/AdminDashboard.css';
 
 const ProjectsList: React.FC = () => {
-  const [projects, setProjects] = useState<Project[]>([]);
+  const [projects, setProjects] = useState<ProjectListItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [deleting, setDeleting] = useState<string | null>(null);
 
@@ -16,7 +18,7 @@ const ProjectsList: React.FC = () => {
 
   const loadProjects = async () => {
     try {
-      const data = await projectsService.list();
+      const data = await projectService.getProjectsByProfile(PORTFOLIO_OWNER_PROFILE_ID);
       setProjects(data.results);
     } catch (error) {
       console.error('Failed to load projects:', error);
@@ -32,11 +34,11 @@ const ProjectsList: React.FC = () => {
 
     setDeleting(id);
     try {
-      await projectsService.delete(id);
+      await projectService.deleteProject(id);
       setProjects(projects.filter(p => p.id !== id));
     } catch (error) {
       console.error('Failed to delete project:', error);
-      alert('Failed to delete project');
+      toast.error('Failed to delete project');
     } finally {
       setDeleting(null);
     }
@@ -102,10 +104,10 @@ const ProjectsList: React.FC = () => {
                         borderRadius: '12px',
                         fontSize: '0.75rem',
                         fontWeight: 600,
-                        background: project.status === 'completed' ? '#c6f6d5' : '#feebc8',
-                        color: project.status === 'completed' ? '#22543d' : '#7c2d12',
+                        background: project.current ? '#feebc8' : '#c6f6d5',
+                        color: project.current ? '#7c2d12' : '#22543d',
                       }}>
-                        {project.status.replace('_', ' ')}
+                        {project.current ? 'In Progress' : 'Completed'}
                       </span>
                     </td>
                     <td>
@@ -129,7 +131,7 @@ const ProjectsList: React.FC = () => {
                       </div>
                     </td>
                     <td>
-                      {project.is_featured ? '⭐' : '-'}
+                      {project.featured ? '⭐' : '-'}
                     </td>
                     <td>{new Date(project.start_date).toLocaleDateString()}</td>
                     <td>

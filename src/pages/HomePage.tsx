@@ -1,8 +1,30 @@
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { FaGithub, FaLinkedin, FaEnvelope, FaArrowDown, FaCode, FaBriefcase, FaGraduationCap } from 'react-icons/fa';
+import { profileService } from '../services/profile.service';
+import { PORTFOLIO_OWNER_PROFILE_ID } from '../constants';
+import type { Profile } from '../types';
 import './HomePage.css';
 
 const HomePage = () => {
+  const [profile, setProfile] = useState<Profile | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchProfile = async () => {
+      try {
+        const data = await profileService.getProfile(PORTFOLIO_OWNER_PROFILE_ID);
+        setProfile(data);
+      } catch (error) {
+        console.error('Failed to fetch profile:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProfile();
+  }, []);
+
   const scrollToSection = (sectionId: string) => {
     document.getElementById(sectionId)?.scrollIntoView({ behavior: 'smooth' });
   };
@@ -25,7 +47,13 @@ const HomePage = () => {
             transition={{ delay: 0.3, type: "spring", stiffness: 200 }}
           >
             <div className="profile-image">
-              <div className="profile-placeholder">TJ</div>
+              {profile?.profile_picture_url ? (
+                <img src={profile.profile_picture_url} alt={profile.full_name || 'Profile'} />
+              ) : (
+                <div className="profile-placeholder">
+                  {profile?.first_name?.[0]}{profile?.last_name?.[0]}
+                </div>
+              )}
             </div>
           </motion.div>
 
@@ -35,7 +63,7 @@ const HomePage = () => {
             animate={{ opacity: 1 }}
             transition={{ delay: 0.5 }}
           >
-            Full Stack Developer
+            {loading ? 'Loading...' : profile?.headline || 'Full Stack Developer'}
           </motion.h1>
 
           <motion.p 
@@ -44,7 +72,7 @@ const HomePage = () => {
             animate={{ opacity: 1 }}
             transition={{ delay: 0.7 }}
           >
-            Building exceptional digital experiences with cutting-edge technologies
+            {profile?.bio || 'Building exceptional digital experiences with cutting-edge technologies'}
           </motion.p>
 
           <motion.div 
@@ -67,15 +95,21 @@ const HomePage = () => {
             animate={{ opacity: 1 }}
             transition={{ delay: 1.1 }}
           >
-            <a href="https://github.com" target="_blank" rel="noopener noreferrer" className="social-icon">
-              <FaGithub />
-            </a>
-            <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" className="social-icon">
-              <FaLinkedin />
-            </a>
-            <a href="mailto:contact@example.com" className="social-icon">
-              <FaEnvelope />
-            </a>
+            {profile?.github_url && (
+              <a href={profile.github_url} target="_blank" rel="noopener noreferrer" className="social-icon">
+                <FaGithub />
+              </a>
+            )}
+            {profile?.linkedin_url && (
+              <a href={profile.linkedin_url} target="_blank" rel="noopener noreferrer" className="social-icon">
+                <FaLinkedin />
+              </a>
+            )}
+            {profile?.email && (
+              <a href={`mailto:${profile.email}`} className="social-icon">
+                <FaEnvelope />
+              </a>
+            )}
           </motion.div>
 
           <motion.div 
@@ -109,9 +143,7 @@ const HomePage = () => {
           <h2 className="section-title">About Me</h2>
           <div className="about-content">
             <p className="about-text">
-              I'm a passionate full-stack developer with expertise in building scalable web applications. 
-              With a strong foundation in both frontend and backend technologies, I create seamless digital 
-              experiences that solve real-world problems.
+              {profile?.bio || "I'm a passionate full-stack developer with expertise in building scalable web applications. With a strong foundation in both frontend and backend technologies, I create seamless digital experiences that solve real-world problems."}
             </p>
             <div className="stats-grid">
               <div className="stat-card">

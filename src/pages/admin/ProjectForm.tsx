@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import { FaSave, FaArrowLeft } from 'react-icons/fa';
 import { projectService } from '../../services/project.service';
+import { PORTFOLIO_OWNER_PROFILE_ID } from '../../constants';
 import type { ProjectCreateRequest, ProjectDetail, ProjectMedia } from '../../types/project.types';
 import '../admin/AdminDashboard.css';
 
@@ -40,11 +42,9 @@ const ProjectForm: React.FC = () => {
   const [captionInput, setCaptionInput] = useState<string>('');
   const [videoFile, setVideoFile] = useState<File | null>(null);
 
-  // Get profile ID from auth context or props (replace with actual implementation)
+  // Set portfolio owner profile ID
   useEffect(() => {
-    // TODO: Get actual profile ID from auth context
-    const profileId = 'your-profile-uuid'; // Replace with actual profile ID
-    setFormData(prev => ({ ...prev, profile: profileId }));
+    setFormData(prev => ({ ...prev, profile: PORTFOLIO_OWNER_PROFILE_ID }));
   }, []);
 
   useEffect(() => {
@@ -85,7 +85,7 @@ const ProjectForm: React.FC = () => {
         }
       } catch (error) {
         console.error('Failed to load project:', error);
-        alert('Failed to load project');
+        toast.error('Failed to load project');
         navigate('/admin/projects');
       } finally {
         setLoadingData(false);
@@ -120,19 +120,19 @@ const ProjectForm: React.FC = () => {
       const isVideo = file.type.startsWith('video/');
       
       if (type === 'image' && !isImage) {
-        alert('Please select image files only');
+        toast.error('Please select image files only');
         return;
       }
       
       if (type === 'video' && !isVideo) {
-        alert('Please select video files only');
+        toast.error('Please select video files only');
         return;
       }
       
       // Validate file size
       const maxSize = type === 'image' ? 5 * 1024 * 1024 : 50 * 1024 * 1024; // 5MB for images, 50MB for videos
       if (file.size > maxSize) {
-        alert(`${type === 'image' ? 'Image' : 'Video'} size must be less than ${maxSize / (1024 * 1024)}MB`);
+        toast.error(`${type === 'image' ? 'Image' : 'Video'} size must be less than ${maxSize / (1024 * 1024)}MB`);
         return;
       }
       
@@ -171,7 +171,7 @@ const ProjectForm: React.FC = () => {
     
     const isValid = videoPatterns.some(pattern => pattern.test(videoUrl));
     if (!isValid) {
-      alert('Please enter a valid video URL (YouTube, Vimeo, or direct video link)');
+      toast.error('Please enter a valid video URL (YouTube, Vimeo, or direct video link)');
       return;
     }
     
@@ -272,7 +272,7 @@ const ProjectForm: React.FC = () => {
     try {
       // Validate required fields
       if (!formData.profile) {
-        alert('Profile ID is required');
+        toast.error('Profile ID is required');
         return;
       }
 
@@ -299,14 +299,14 @@ const ProjectForm: React.FC = () => {
       }
 
       console.log('Project saved:', savedProject);
-      alert('Project saved successfully!');
+      toast.success('Project saved successfully!');
       navigate('/admin/projects');
     } catch (error) {
       console.error('Failed to save project:', error);
       const errorMessage = error && typeof error === 'object' && 'message' in error 
         ? (error as { message: string }).message 
         : 'Failed to save project. Please check all required fields.';
-      alert(errorMessage);
+      toast.error(errorMessage);
     } finally {
       setLoading(false);
     }
@@ -670,9 +670,6 @@ const ProjectForm: React.FC = () => {
                 <small style={{ display: 'block', color: '#718096', marginTop: '0.5rem' }}>
                   Supported formats: MP4, MOV, AVI, WebM, MKV
                 </small>
-              </div>
-                  </button>
-                </div>
               </div>
 
               {/* Image Preview Gallery */}

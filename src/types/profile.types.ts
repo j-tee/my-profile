@@ -2,8 +2,12 @@ export interface Profile {
   id: string;
   firstName: string;
   lastName: string;
+  first_name: string;  // Backend compatibility
+  last_name: string;   // Backend compatibility
+  full_name?: string;  // Backend computed field
   headline: string;
   summary: string;
+  bio?: string;        // Backend field
   email: string;
   phone?: string;
   location: {
@@ -12,7 +16,13 @@ export interface Profile {
     country: string;
   };
   profilePictureUrl?: string;
+  profile_picture_url?: string;  // Backend compatibility
   coverImageUrl?: string;
+  cover_image_url?: string;      // Backend compatibility
+  github_url?: string;           // Backend social links
+  linkedin_url?: string;         // Backend social links
+  twitter_url?: string;          // Backend social links
+  website_url?: string;          // Backend social links
   socialLinks: SocialLink[];
   createdAt: string;
   updatedAt: string;

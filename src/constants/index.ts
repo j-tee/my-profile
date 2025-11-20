@@ -1,3 +1,7 @@
+// Portfolio Owner Identity
+export const PORTFOLIO_OWNER_PROFILE_ID = 'bcd91fdc-d398-42f5-87b3-f7699fd50eae';
+export const PORTFOLIO_OWNER_EMAIL = 'juliustetteh@gmail.com';
+
 export const API_ENDPOINTS = {
   PROFILES: '/profiles',
   EXPERIENCES: '/experiences',

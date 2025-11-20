@@ -85,8 +85,8 @@ export interface MFADisableRequest {
   password: string;
 }
 
-// API Error
-export interface ApiError {
-  detail?: string;
-  [key: string]: string[] | string | undefined;
-}
+// API Error (use the one from api.types.ts instead)
+// export interface ApiError {
+//   detail?: string;
+//   [key: string]: string[] | string | undefined;
+// }

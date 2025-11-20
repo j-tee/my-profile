@@ -22,6 +22,11 @@ const Navbar: React.FC = () => {
 
         <div className="navbar-menu">
           <Link to="/" className="navbar-link">Home</Link>
+          <Link to="/projects" className="navbar-link">Projects</Link>
+          <Link to="/skills" className="navbar-link">Skills</Link>
+          <Link to="/experience" className="navbar-link">Experience</Link>
+          <Link to="/education" className="navbar-link">Education</Link>
+          <Link to="/certifications" className="navbar-link">Certifications</Link>
           
           {isAuthenticated ? (
             <>

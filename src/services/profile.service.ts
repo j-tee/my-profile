@@ -1,4 +1,4 @@
-import { apiClient } from './apiClient';
+import apiClient from './api';
 import type { 
   Profile, 
   CreateProfileDTO, 
@@ -12,17 +12,18 @@ export const profileService = {
   /**
    * Get current user's profile
    */
-  getProfile: async (): Promise<Profile> => {
-    const response = await apiClient.get<ApiResponse<Profile>>(`${PROFILE_ENDPOINT}/me`);
-    return response.data.data;
+  getProfile: async (id?: string): Promise<Profile> => {
+    const endpoint = id ? `${PROFILE_ENDPOINT}/${id}/` : `${PROFILE_ENDPOINT}/me/`;
+    const response = await apiClient.get<Profile>(endpoint);
+    return response.data;
   },
 
   /**
    * Get profile by ID
    */
   getProfileById: async (id: string): Promise<Profile> => {
-    const response = await apiClient.get<ApiResponse<Profile>>(`${PROFILE_ENDPOINT}/${id}`);
-    return response.data.data;
+    const response = await apiClient.get<Profile>(`${PROFILE_ENDPOINT}/${id}/`);
+    return response.data;
   },
 
   /**

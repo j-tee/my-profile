@@ -1,5 +1,6 @@
 import React, { useState, useEffect, type FormEvent, type ChangeEvent } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import { FaSave, FaTimes, FaKey, FaEnvelope } from 'react-icons/fa';
 import { userService } from '../../services/user.service';
 import { useAuth } from '../../contexts/useAuth';
@@ -140,10 +141,10 @@ const UserForm: React.FC = () => {
 
     try {
       await userService.resetPassword(id, newPassword);
-      alert('Password reset successfully');
-    } catch (err) {
-      alert('Failed to reset password');
-      console.error(err);
+      toast.success('Password reset successfully');
+    } catch (error) {
+      toast.error('Failed to reset password');
+      console.error(error);
     }
   };
 
@@ -153,9 +154,9 @@ const UserForm: React.FC = () => {
     try {
       await userService.verifyEmail(id);
       loadUser();
-      alert('Email verified successfully');
+      toast.success('Email verified successfully');
     } catch (err) {
-      alert('Failed to verify email');
+      toast.error('Failed to verify email');
       console.error(err);
     }
   };
