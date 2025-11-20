@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { FaSave, FaArrowLeft } from 'react-icons/fa';
 import { projectsService } from '../../services/portfolio.service';
+import { apiClient } from '../../services/apiClient';
 import type { ProjectRequest } from '../../types/project.types';
 import type { Project as PortfolioProject } from '../../types/portfolio.types';
 import '../admin/AdminDashboard.css';
@@ -27,6 +28,8 @@ const ProjectForm: React.FC = () => {
   const [techInput, setTechInput] = useState('');
   const [loading, setLoading] = useState(false);
   const [loadingData, setLoadingData] = useState(isEdit);
+  const [imageFile, setImageFile] = useState<File | null>(null);
+  const [imagePreview, setImagePreview] = useState<string>('');
 
   useEffect(() => {
     const loadProject = async (projectId: string) => {
@@ -71,6 +74,38 @@ const ProjectForm: React.FC = () => {
     }
   };
 
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      // Validate file type
+      if (!file.type.startsWith('image/')) {
+        alert('Please select an image file');
+        return;
+      }
+      
+      // Validate file size (max 5MB)
+      if (file.size > 5 * 1024 * 1024) {
+        alert('Image size must be less than 5MB');
+        return;
+      }
+      
+      setImageFile(file);
+      
+      // Create preview
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImagePreview(reader.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const removeImage = () => {
+    setImageFile(null);
+    setImagePreview('');
+    setFormData((prev) => ({ ...prev, image_url: '' }));
+  };
+
   const handleAddTechnology = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
       e.preventDefault();
@@ -97,15 +132,46 @@ const ProjectForm: React.FC = () => {
     setLoading(true);
 
     try {
-      if (isEdit && id) {
-        await projectsService.update(id, formData);
+      // If there's an image file, we need to upload it with FormData
+      if (imageFile) {
+        const formDataWithFile = new FormData();
+        formDataWithFile.append('title', formData.title);
+        formDataWithFile.append('description', formData.description);
+        formDataWithFile.append('technologies', JSON.stringify(formData.technologies));
+        formDataWithFile.append('status', formData.status);
+        formDataWithFile.append('start_date', formData.start_date);
+        if (formData.end_date) formDataWithFile.append('end_date', formData.end_date);
+        if (formData.github_url) formDataWithFile.append('github_url', formData.github_url);
+        if (formData.live_url) formDataWithFile.append('live_url', formData.live_url);
+        formDataWithFile.append('is_featured', String(formData.is_featured));
+        formDataWithFile.append('image', imageFile);
+
+        // Note: Backend needs to support multipart/form-data
+        const response = await apiClient.post(
+          isEdit && id ? `/projects/${id}/` : '/projects/',
+          formDataWithFile,
+          {
+            headers: { 'Content-Type': 'multipart/form-data' }
+          }
+        );
+        console.log('Project saved with image:', response.data);
       } else {
-        await projectsService.create(formData);
+        // Regular JSON submission
+        if (isEdit && id) {
+          await projectsService.update(id, formData);
+        } else {
+          await projectsService.create(formData);
+        }
       }
+      
+      alert('Project saved successfully!');
       navigate('/admin/projects');
     } catch (error) {
       console.error('Failed to save project:', error);
-      alert('Failed to save project');
+      const errorMessage = error && typeof error === 'object' && 'message' in error 
+        ? (error as { message: string }).message 
+        : 'Failed to save project. Make sure the backend API is running.';
+      alert(errorMessage);
     } finally {
       setLoading(false);
     }
@@ -271,31 +337,114 @@ const ProjectForm: React.FC = () => {
             </div>
           </div>
 
-          <div className="form-row">
-            <div className="form-group">
-              <label htmlFor="image_url">Image URL</label>
-              <input
-                type="url"
-                id="image_url"
-                name="image_url"
-                value={formData.image_url}
-                onChange={handleChange}
-                placeholder="https://example.com/image.jpg"
-              />
-            </div>
-
-            <div className="form-group">
-              <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', cursor: 'pointer' }}>
+          <div className="form-group">
+            <label>Project Image</label>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+              {/* Image Upload */}
+              <div>
                 <input
-                  type="checkbox"
-                  name="is_featured"
-                  checked={formData.is_featured}
-                  onChange={handleChange}
-                  style={{ width: 'auto' }}
+                  type="file"
+                  id="image_file"
+                  accept="image/*"
+                  onChange={handleImageChange}
+                  style={{ display: 'none' }}
                 />
-                <span>Featured Project</span>
-              </label>
+                <label
+                  htmlFor="image_file"
+                  style={{
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '0.5rem',
+                    padding: '0.75rem 1.5rem',
+                    background: '#4299e1',
+                    color: 'white',
+                    borderRadius: '8px',
+                    cursor: 'pointer',
+                    fontWeight: 600,
+                    fontSize: '0.875rem',
+                    transition: 'all 0.2s',
+                  }}
+                  onMouseEnter={(e) => (e.currentTarget.style.background = '#3182ce')}
+                  onMouseLeave={(e) => (e.currentTarget.style.background = '#4299e1')}
+                >
+                  📷 Upload Image
+                </label>
+                <span style={{ marginLeft: '1rem', fontSize: '0.875rem', color: '#718096' }}>
+                  {imageFile ? imageFile.name : 'No file selected'}
+                </span>
+              </div>
+
+              {/* Image URL Alternative */}
+              <div>
+                <p style={{ fontSize: '0.875rem', color: '#4a5568', marginBottom: '0.5rem' }}>
+                  Or provide an image URL:
+                </p>
+                <input
+                  type="url"
+                  id="image_url"
+                  name="image_url"
+                  value={formData.image_url}
+                  onChange={handleChange}
+                  placeholder="https://example.com/image.jpg"
+                  style={{
+                    width: '100%',
+                    padding: '0.75rem 1rem',
+                    border: '2px solid #e2e8f0',
+                    borderRadius: '8px',
+                    fontSize: '0.875rem',
+                  }}
+                />
+              </div>
+
+              {/* Image Preview */}
+              {(imagePreview || formData.image_url) && (
+                <div style={{ position: 'relative' }}>
+                  <img
+                    src={imagePreview || formData.image_url}
+                    alt="Preview"
+                    style={{
+                      maxWidth: '300px',
+                      maxHeight: '200px',
+                      borderRadius: '8px',
+                      border: '2px solid #e2e8f0',
+                    }}
+                  />
+                  <button
+                    type="button"
+                    onClick={removeImage}
+                    style={{
+                      position: 'absolute',
+                      top: '0.5rem',
+                      right: '0.5rem',
+                      background: '#fc8181',
+                      color: 'white',
+                      border: 'none',
+                      borderRadius: '50%',
+                      width: '30px',
+                      height: '30px',
+                      cursor: 'pointer',
+                      fontSize: '1rem',
+                      fontWeight: 'bold',
+                    }}
+                  >
+                    ×
+                  </button>
+                </div>
+              )}
             </div>
+          </div>
+
+          <div className="form-group">
+            <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', cursor: 'pointer' }}>
+              <input
+                type="checkbox"
+                name="is_featured"
+                checked={formData.is_featured}
+                onChange={handleChange}
+                style={{ width: 'auto' }}
+              />
+              <span>Featured Project</span>
+            </label>
           </div>
 
           <div className="form-actions">
