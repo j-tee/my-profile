@@ -157,7 +157,7 @@ const ProfilePage: React.FC = () => {
             <div className="profile-info">
               <h1>{user.full_name}</h1>
               <p className="profile-email">{user.email}</p>
-              <span className="profile-badge">{user.role.replace('_', ' ')}</span>
+              <span className="profile-badge">{user.role?.replace('_', ' ') || 'User'}</span>
             </div>
           </div>
         </div>

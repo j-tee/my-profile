@@ -14,8 +14,9 @@ export const profileService = {
    */
   getProfile: async (id?: string): Promise<Profile> => {
     const endpoint = id ? `${PROFILE_ENDPOINT}/${id}/` : `${PROFILE_ENDPOINT}/me/`;
-    const response = await apiClient.get<Profile>(endpoint);
-    return response.data;
+    const response = await apiClient.get<{ profile: Profile; is_complete: boolean; needs_update: boolean }>(endpoint);
+    // Backend returns { profile, is_complete, needs_update }
+    return response.data.profile || response.data;
   },
 
   /**
@@ -30,16 +31,19 @@ export const profileService = {
    * Create a new profile
    */
   createProfile: async (data: CreateProfileDTO): Promise<Profile> => {
-    const response = await apiClient.post<ApiResponse<Profile>>(PROFILE_ENDPOINT, data);
-    return response.data.data;
+    const response = await apiClient.post<Profile>(PROFILE_ENDPOINT, data);
+    return response.data;
   },
 
   /**
-   * Update profile
+   * Update profile (uses /profiles/me/ for current user)
    */
   updateProfile: async (id: string, data: UpdateProfileDTO): Promise<Profile> => {
-    const response = await apiClient.patch<ApiResponse<Profile>>(`${PROFILE_ENDPOINT}/${id}`, data);
-    return response.data.data;
+    // Use /profiles/me/ endpoint for updating current user's profile
+    const endpoint = `${PROFILE_ENDPOINT}/me/`;
+    const response = await apiClient.patch<{ profile: Profile; is_complete: boolean; needs_update: boolean }>(endpoint, data);
+    // Backend returns { profile, is_complete, needs_update }
+    return response.data.profile || response.data;
   },
 
   /**
@@ -49,7 +53,7 @@ export const profileService = {
     const formData = new FormData();
     formData.append('profile_picture', file);
     
-    const response = await apiClient.post<ApiResponse<Profile>>(
+    const response = await apiClient.post<Profile>(
       `${PROFILE_ENDPOINT}/${id}/upload-picture`,
       formData,
       {
@@ -58,7 +62,7 @@ export const profileService = {
         },
       }
     );
-    return response.data.data;
+    return response.data;
   },
 
   /**
@@ -68,7 +72,7 @@ export const profileService = {
     const formData = new FormData();
     formData.append('cover_image', file);
     
-    const response = await apiClient.post<ApiResponse<Profile>>(
+    const response = await apiClient.post<Profile>(
       `${PROFILE_ENDPOINT}/${id}/upload-cover`,
       formData,
       {
@@ -77,7 +81,7 @@ export const profileService = {
         },
       }
     );
-    return response.data.data;
+    return response.data;
   },
 
   /**
