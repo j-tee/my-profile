@@ -2,12 +2,23 @@ import axios, { type AxiosInstance, AxiosError, type InternalAxiosRequestConfig 
 
 const DEFAULT_PROD_API = 'https://profileapi.alphalogiquetechnologies.com/api';
 const DEFAULT_DEV_API = 'http://localhost:8000/api';
+const PROD_HOST_SIGNATURE = 'alphalogiquetechnologies.com';
 
-const API_BASE_URL =
-  import.meta.env.VITE_API_BASE_URL ??
-  (import.meta.env.PROD ? DEFAULT_PROD_API : DEFAULT_DEV_API);
+const resolveDefaultBaseUrl = () => {
+  if (typeof window !== 'undefined') {
+    const host = window.location.hostname;
+    if (host && host.includes(PROD_HOST_SIGNATURE)) {
+      return DEFAULT_PROD_API;
+    }
+  }
+  return DEFAULT_DEV_API;
+};
 
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL ?? resolveDefaultBaseUrl();
+
+if (import.meta.env.DEV) {
   console.log('API Base URL:', API_BASE_URL);
+}
 // Create axios instance
 const apiClient: AxiosInstance = axios.create({
   baseURL: API_BASE_URL,
