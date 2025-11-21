@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { FaSave, FaArrowLeft } from 'react-icons/fa';
 import { projectService } from '../../services/project.service';
+import { useAuth } from '../../contexts/useAuth';
 import type { ProjectCreateRequest, ProjectDetail, ProjectMedia } from '../../types/project.types';
 import '../admin/AdminDashboard.css';
 
@@ -11,7 +12,7 @@ const ProjectForm: React.FC = () => {
   const isEdit = !!id;
 
   const [formData, setFormData] = useState<ProjectCreateRequest>({
-    profile: '', // Will be set from context/props
+    user: '', // Will be set from auth context
     title: '',
     description: '',
     long_description: '',
@@ -41,19 +42,21 @@ const ProjectForm: React.FC = () => {
   // const [captionInput, setCaptionInput] = useState<string>('');
   const [videoFile, setVideoFile] = useState<File | null>(null);
 
-  // Get profile ID from auth context or props (replace with actual implementation)
+  const { user } = useAuth();
+
+  // Set user ID from auth context
   useEffect(() => {
-    // TODO: Get actual profile ID from auth context
-    const profileId = 'your-profile-uuid'; // Replace with actual profile ID
-    setFormData(prev => ({ ...prev, profile: profileId }));
-  }, []);
+    if (user?.id) {
+      setFormData(prev => ({ ...prev, user: user.id }));
+    }
+  }, [user]);
 
   useEffect(() => {
     const loadProject = async (projectId: string) => {
       try {
         const project: ProjectDetail = await projectService.getProjectById(projectId);
         setFormData({
-          profile: project.profile,
+          user: project.user,
           title: project.title,
           description: project.description,
           long_description: project.long_description || '',
@@ -276,8 +279,8 @@ const ProjectForm: React.FC = () => {
 
     try {
       // Validate required fields
-      if (!formData.profile) {
-        alert('Profile ID is required');
+      if (!formData.user) {
+        alert('User ID is required. Please make sure you are logged in.');
         return;
       }
 

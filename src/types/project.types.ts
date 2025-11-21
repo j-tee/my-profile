@@ -28,8 +28,8 @@ export interface ProjectListItem {
 
 export interface ProjectDetail {
   id: string;
-  profile: string;            // Profile UUID
-  profile_name: string;       // Read-only
+  user: string;               // User UUID
+  user_name: string;          // Read-only
   title: string;
   description: string;        // Short description
   long_description: string | null;
@@ -61,7 +61,7 @@ export type Project = ProjectListItem;
 
 // Request interfaces for creating/updating projects
 export interface ProjectCreateRequest {
-  profile: string;            // Profile UUID (required)
+  user: string;               // User UUID (required)
   title: string;
   description: string;
   long_description?: string;
@@ -107,7 +107,7 @@ export interface PaginatedProjectsResponse {
 export interface ProjectFilters {
   page?: number;
   page_size?: number;
-  profile?: string;           // Filter by profile UUID
+  user?: string;              // Filter by user UUID
   featured_only?: boolean;
   current_only?: boolean;
   search?: string;

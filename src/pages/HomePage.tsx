@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { FaGithub, FaLinkedin, FaEnvelope, FaArrowDown, FaCode, FaBriefcase, FaGraduationCap } from 'react-icons/fa';
 import type { User } from '../types';
+import { userService } from '../services';
+import { getPortfolioOwnerId } from '../utils/profileUtils';
 import './HomePage.css';
 
 const HomePage = () => {
@@ -9,18 +11,18 @@ const HomePage = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // TODO: Once backend provides a public endpoint to fetch portfolio owner user data
-    // (e.g., GET /api/users/{PORTFOLIO_OWNER_USER_ID}/public/), use that here
-    // For now, using static/fallback data since we don't need to authenticate
-    // to view the public portfolio homepage
-    
-    const loadPortfolioOwner = () => {
+    const loadPortfolioOwner = async () => {
       try {
-        // Static portfolio owner data
-        // In production, this should come from a public API endpoint
+        // Fetch the portfolio owner's user ID dynamically, then get their data
+        const ownerId = await getPortfolioOwnerId();
+        const userData = await userService.get(ownerId);
+        setUser(userData);
+      } catch (err) {
+        console.error('Failed to load portfolio owner data:', err);
+        // Fallback to basic data if API fails
         setUser({
-          id: '251c297c-130c-46cc-b901-2866d3f4dcb1',
-          email: 'juliustetteh@gmail.com',
+          id: '',
+          email: 'portfolio@example.com',
           first_name: 'Julius',
           last_name: 'Tetteh',
           full_name: 'Julius Tetteh',
@@ -30,15 +32,13 @@ const HomePage = () => {
           is_active: true,
           mfa_enabled: false,
           headline: 'Full Stack Developer',
-          summary: 'Building exceptional digital experiences with cutting-edge technologies. Check back soon for more information.',
+          summary: 'Building exceptional digital experiences with cutting-edge technologies.',
           city: 'Accra',
           state: 'Greater Accra',
           country: 'Ghana',
           created_at: new Date().toISOString(),
           updated_at: new Date().toISOString(),
         });
-      } catch (err) {
-        console.error('Failed to load portfolio owner data:', err);
       } finally {
         setLoading(false);
       }

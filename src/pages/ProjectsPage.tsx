@@ -1,15 +1,18 @@
 import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { FaGithub, FaExternalLinkAlt, FaCalendar, FaStar } from 'react-icons/fa';
+import { FaGithub, FaExternalLinkAlt, FaCalendar, FaStar, FaImages, FaInfoCircle } from 'react-icons/fa';
 import { projectService } from '../services/project.service';
-import { getPortfolioOwnerId } from '../utils/profileUtils';
 import type { ProjectListItem } from '../types/project.types';
+import ImageGalleryModal from '../components/common/ImageGalleryModal';
 import './HomePage.css';
 
 const ProjectsPage = () => {
   const [projects, setProjects] = useState<ProjectListItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState<'all' | 'featured'>('all');
+  const [galleryOpen, setGalleryOpen] = useState(false);
+  const [galleryImages, setGalleryImages] = useState<string[]>([]);
 
   useEffect(() => {
     const fetchProjects = async () => {
@@ -21,8 +24,8 @@ const ProjectsPage = () => {
           // Use type assertion since both types are compatible for display
           setProjects(data as unknown as ProjectListItem[]);
         } else {
-          const userId = await getPortfolioOwnerId();
-          const data = await projectService.getProjectsByUser(userId);
+          // Fetch all projects without user filter - backend will return all public projects
+          const data = await projectService.getProjects();
           setProjects(data.results);
         }
       } catch (error) {
@@ -34,6 +37,27 @@ const ProjectsPage = () => {
     
     fetchProjects();
   }, [filter]);
+
+  const handleImageClick = async (projectId: string) => {
+    try {
+      const projectDetail = await projectService.getProjectById(projectId);
+      
+      if (projectDetail.images && projectDetail.images.length > 0) {
+        const imageUrls = projectDetail.images
+          .sort((a, b) => a.order - b.order)
+          .map(img => img.image_url);
+        setGalleryImages(imageUrls);
+        setGalleryOpen(true);
+      }
+    } catch (error) {
+      console.error('Failed to fetch project details:', error);
+    }
+  };
+
+  const closeGallery = () => {
+    setGalleryOpen(false);
+    setGalleryImages([]);
+  };
 
   if (loading) {
     return (
@@ -115,11 +139,83 @@ const ProjectsPage = () => {
                     }}
                   >
                     {project.thumbnail && (
-                      <div style={{
-                        width: '100%',
-                        height: '200px',
-                        background: `url(${project.thumbnail}) center/cover`,
-                      }} />
+                      <div 
+                        className="project-thumbnail"
+                        onClick={() => handleImageClick(project.id)}
+                        style={{
+                          width: '100%',
+                          height: '200px',
+                          background: `url(${project.thumbnail}) center/cover`,
+                          cursor: 'pointer',
+                          position: 'relative',
+                          transition: 'transform 0.3s ease',
+                        }}
+                        onMouseEnter={(e) => {
+                          e.currentTarget.style.transform = 'scale(1.05)';
+                        }}
+                        onMouseLeave={(e) => {
+                          e.currentTarget.style.transform = 'scale(1)';
+                        }}
+                      >
+                        <div style={{
+                          position: 'absolute',
+                          top: '0',
+                          left: '0',
+                          right: '0',
+                          bottom: '0',
+                          background: 'rgba(0, 0, 0, 0)',
+                          transition: 'background 0.3s ease',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                        }}
+                        onMouseEnter={(e) => {
+                          e.currentTarget.style.background = 'rgba(0, 0, 0, 0.4)';
+                        }}
+                        onMouseLeave={(e) => {
+                          e.currentTarget.style.background = 'rgba(0, 0, 0, 0)';
+                        }}
+                        >
+                          <div style={{
+                            background: 'rgba(66, 153, 225, 0.95)',
+                            color: 'white',
+                            padding: '0.75rem 1.25rem',
+                            borderRadius: '8px',
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: '0.5rem',
+                            fontSize: '1rem',
+                            fontWeight: 600,
+                            opacity: 0,
+                            transition: 'opacity 0.3s ease',
+                            pointerEvents: 'none',
+                          }}
+                          className="gallery-hint"
+                          >
+                            <FaImages size={20} />
+                            <span>View Gallery</span>
+                          </div>
+                        </div>
+                        <div style={{
+                          position: 'absolute',
+                          top: '0.75rem',
+                          right: '0.75rem',
+                          background: 'rgba(66, 153, 225, 0.95)',
+                          color: 'white',
+                          padding: '0.5rem 0.75rem',
+                          borderRadius: '8px',
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: '0.4rem',
+                          fontSize: '0.875rem',
+                          fontWeight: 600,
+                          backdropFilter: 'blur(10px)',
+                          boxShadow: '0 2px 8px rgba(0, 0, 0, 0.2)',
+                        }}>
+                          <FaImages />
+                          <span>Gallery</span>
+                        </div>
+                      </div>
                     )}
                     <div style={{ padding: '1.5rem' }}>
                       <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.5rem' }}>
@@ -182,6 +278,32 @@ const ProjectsPage = () => {
                         )}
                       </div>
 
+                      <Link
+                        to={`/projects/${project.id}`}
+                        style={{
+                          display: 'block',
+                          width: '100%',
+                          padding: '0.75rem',
+                          background: '#4299e1',
+                          color: 'white',
+                          textDecoration: 'none',
+                          borderRadius: '8px',
+                          textAlign: 'center',
+                          fontWeight: 600,
+                          marginBottom: '1rem',
+                          transition: 'all 0.3s ease',
+                        }}
+                        onMouseEnter={(e) => {
+                          e.currentTarget.style.background = '#3182ce';
+                        }}
+                        onMouseLeave={(e) => {
+                          e.currentTarget.style.background = '#4299e1';
+                        }}
+                      >
+                        <FaInfoCircle style={{ marginRight: '0.5rem' }} />
+                        View Details
+                      </Link>
+
                       <div style={{ display: 'flex', gap: '1rem', paddingTop: '1rem', borderTop: '1px solid #e2e8f0' }}>
                         {project.github_url && (
                           <a
@@ -228,6 +350,13 @@ const ProjectsPage = () => {
           </motion.div>
         </div>
       </section>
+
+      <ImageGalleryModal
+        images={galleryImages}
+        initialIndex={0}
+        isOpen={galleryOpen}
+        onClose={closeGallery}
+      />
     </div>
   );
 };
