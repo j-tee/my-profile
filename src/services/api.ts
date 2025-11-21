@@ -7,6 +7,7 @@ const API_BASE_URL =
   import.meta.env.VITE_API_BASE_URL ??
   (import.meta.env.PROD ? DEFAULT_PROD_API : DEFAULT_DEV_API);
 
+  console.log('API Base URL:', API_BASE_URL);
 // Create axios instance
 const apiClient: AxiosInstance = axios.create({
   baseURL: API_BASE_URL,
