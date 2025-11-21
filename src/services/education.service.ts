@@ -11,6 +11,17 @@ const EDUCATION_ENDPOINT = '/education';
 
 export const educationService = {
   /**
+   * Get all education records (no user filter)
+   */
+  getAllEducation: async (params?: QueryParams): Promise<PaginatedResponse<Education>> => {
+    const response = await apiClient.get<PaginatedResponse<Education>>(
+      EDUCATION_ENDPOINT,
+      { params }
+    );
+    return response.data;
+  },
+
+  /**
    * Get all education records for a user
    */
   getEducation: async (userId: string, params?: QueryParams): Promise<PaginatedResponse<Education>> => {

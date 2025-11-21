@@ -1,56 +1,23 @@
-import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { FaGithub, FaLinkedin, FaEnvelope, FaArrowDown, FaCode, FaBriefcase, FaGraduationCap } from 'react-icons/fa';
-import type { User } from '../types';
-import { userService } from '../services';
-import { getPortfolioOwnerId } from '../utils/profileUtils';
 import './HomePage.css';
 
+// Static portfolio data - update this with your actual information
+const PORTFOLIO_DATA = {
+  full_name: 'Julius Tetteh',
+  first_name: 'Julius',
+  last_name: 'Tetteh',
+  headline: 'Full Stack Developer',
+  summary: 'Building exceptional digital experiences with cutting-edge technologies',
+  email: 'juliustetteh@gmail.com',
+  profile_picture_url: '', // Add your image URL here
+  social_links: {
+    github: 'https://github.com/j-tee',
+    linkedin: '', // Add your LinkedIn URL
+  }
+};
+
 const HomePage = () => {
-  const [user, setUser] = useState<User | null>(null);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const loadPortfolioOwner = async () => {
-      try {
-        // Fetch the portfolio owner's user ID dynamically, then get their data
-        const ownerId = await getPortfolioOwnerId();
-        const userData = await userService.get(ownerId);
-        setUser(userData);
-      } catch (err) {
-        console.error('Failed to load portfolio owner data:', err);
-        // Fallback to basic data if API fails
-        setUser({
-          id: '',
-          email: 'portfolio@example.com',
-          first_name: 'Julius',
-          last_name: 'Tetteh',
-          full_name: 'Julius Tetteh',
-          phone: null,
-          role: 'super_admin',
-          is_verified: true,
-          is_active: true,
-          mfa_enabled: false,
-          headline: 'Full Stack Developer',
-          summary: 'Building exceptional digital experiences with cutting-edge technologies.',
-          city: 'Accra',
-          state: 'Greater Accra',
-          country: 'Ghana',
-          created_at: new Date().toISOString(),
-          updated_at: new Date().toISOString(),
-        });
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    loadPortfolioOwner();
-  }, []);
-
-  // Helper to get social link URL by platform
-  const getSocialLink = (platform: 'github' | 'linkedin' | 'twitter' | 'portfolio' | 'other') => {
-    return user?.social_links?.find(link => link.platform === platform)?.url;
-  };
 
   const scrollToSection = (sectionId: string) => {
     document.getElementById(sectionId)?.scrollIntoView({ behavior: 'smooth' });
@@ -74,11 +41,11 @@ const HomePage = () => {
             transition={{ delay: 0.3, type: "spring", stiffness: 200 }}
           >
             <div className="profile-image">
-              {user?.profile_picture_url ? (
-                <img src={user.profile_picture_url} alt={user.full_name || 'Profile'} />
+              {PORTFOLIO_DATA.profile_picture_url ? (
+                <img src={PORTFOLIO_DATA.profile_picture_url} alt={PORTFOLIO_DATA.full_name} />
               ) : (
                 <div className="profile-placeholder">
-                  {user?.first_name?.[0]}{user?.last_name?.[0]}
+                  {PORTFOLIO_DATA.first_name[0]}{PORTFOLIO_DATA.last_name[0]}
                 </div>
               )}
             </div>
@@ -90,7 +57,7 @@ const HomePage = () => {
             animate={{ opacity: 1 }}
             transition={{ delay: 0.5 }}
           >
-            {loading ? 'Loading...' : user?.headline || 'Full Stack Developer'}
+            {PORTFOLIO_DATA.headline}
           </motion.h1>
 
           <motion.p 
@@ -99,7 +66,7 @@ const HomePage = () => {
             animate={{ opacity: 1 }}
             transition={{ delay: 0.7 }}
           >
-            {user?.summary || 'Building exceptional digital experiences with cutting-edge technologies'}
+            {PORTFOLIO_DATA.summary}
           </motion.p>
 
           <motion.div 
@@ -122,21 +89,19 @@ const HomePage = () => {
             animate={{ opacity: 1 }}
             transition={{ delay: 1.1 }}
           >
-            {getSocialLink('github') && (
-              <a href={getSocialLink('github')} target="_blank" rel="noopener noreferrer" className="social-icon">
+            {PORTFOLIO_DATA.social_links.github && (
+              <a href={PORTFOLIO_DATA.social_links.github} target="_blank" rel="noopener noreferrer" className="social-icon">
                 <FaGithub />
               </a>
             )}
-            {getSocialLink('linkedin') && (
-              <a href={getSocialLink('linkedin')} target="_blank" rel="noopener noreferrer" className="social-icon">
+            {PORTFOLIO_DATA.social_links.linkedin && (
+              <a href={PORTFOLIO_DATA.social_links.linkedin} target="_blank" rel="noopener noreferrer" className="social-icon">
                 <FaLinkedin />
               </a>
             )}
-            {user?.email && (
-              <a href={`mailto:${user.email}`} className="social-icon">
-                <FaEnvelope />
-              </a>
-            )}
+            <a href={`mailto:${PORTFOLIO_DATA.email}`} className="social-icon">
+              <FaEnvelope />
+            </a>
           </motion.div>
 
           <motion.div 
@@ -170,7 +135,7 @@ const HomePage = () => {
           <h2 className="section-title">About Me</h2>
           <div className="about-content">
             <p className="about-text">
-              {user?.summary || "I'm a passionate full-stack developer with expertise in building scalable web applications. With a strong foundation in both frontend and backend technologies, I create seamless digital experiences that solve real-world problems."}
+              I'm a passionate full-stack developer with expertise in building scalable web applications. With a strong foundation in both frontend and backend technologies, I create seamless digital experiences that solve real-world problems.
             </p>
             <div className="stats-grid">
               <div className="stat-card">

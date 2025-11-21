@@ -11,6 +11,17 @@ const CERTIFICATION_ENDPOINT = '/certifications';
 
 export const certificationService = {
   /**
+   * Get all certifications (no user filter)
+   */
+  getAllCertifications: async (params?: QueryParams): Promise<PaginatedResponse<Certification>> => {
+    const response = await apiClient.get<PaginatedResponse<Certification>>(
+      CERTIFICATION_ENDPOINT,
+      { params }
+    );
+    return response.data;
+  },
+
+  /**
    * Get all certifications for a user
    */
   getCertifications: async (

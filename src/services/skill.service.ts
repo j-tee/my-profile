@@ -12,6 +12,17 @@ const SKILL_ENDPOINT = '/skills';
 
 export const skillService = {
   /**
+   * Get all skills (no user filter)
+   */
+  getAllSkills: async (params?: QueryParams): Promise<PaginatedResponse<Skill>> => {
+    const response = await apiClient.get<PaginatedResponse<Skill>>(
+      SKILL_ENDPOINT,
+      { params }
+    );
+    return response.data;
+  },
+
+  /**
    * Get all skills for a user
    */
   getSkills: async (userId: string, params?: QueryParams): Promise<PaginatedResponse<Skill>> => {
