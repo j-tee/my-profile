@@ -19,7 +19,7 @@ const HomePage = () => {
         // Static portfolio owner data
         // In production, this should come from a public API endpoint
         setUser({
-          id: 'portfolio-owner',
+          id: '251c297c-130c-46cc-b901-2866d3f4dcb1',
           email: 'juliustetteh@gmail.com',
           first_name: 'Julius',
           last_name: 'Tetteh',

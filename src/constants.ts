@@ -1,5 +1,5 @@
 // Portfolio Owner Identity (now using User ID instead of Profile ID)
-export const PORTFOLIO_OWNER_USER_ID = 'bcd91fdc-d398-42f5-87b3-f7699fd50eae';
+export const PORTFOLIO_OWNER_USER_ID = '251c297c-130c-46cc-b901-2866d3f4dcb1';
 export const PORTFOLIO_OWNER_EMAIL = 'juliustetteh@gmail.com';
 
 export const ROUTES = {
