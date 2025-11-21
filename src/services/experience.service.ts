@@ -11,12 +11,12 @@ const EXPERIENCE_ENDPOINT = '/experiences';
 
 export const experienceService = {
   /**
-   * Get all experiences for a profile
+   * Get all experiences for a user
    */
-  getExperiences: async (profileId: string, params?: QueryParams): Promise<PaginatedResponse<Experience>> => {
+  getExperiences: async (userId: string, params?: QueryParams): Promise<PaginatedResponse<Experience>> => {
     const response = await apiClient.get<PaginatedResponse<Experience>>(
       EXPERIENCE_ENDPOINT,
-      { params: { ...params, profile_id: profileId } }
+      { params: { ...params, user_id: userId } }
     );
     return response.data;
   },

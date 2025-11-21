@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { FaGithub, FaExternalLinkAlt, FaCalendar, FaStar } from 'react-icons/fa';
 import { projectService } from '../services/project.service';
-import { PORTFOLIO_OWNER_PROFILE_ID } from '../constants';
+import { getPortfolioOwnerId } from '../utils/profileUtils';
 import type { ProjectListItem } from '../types/project.types';
 import './HomePage.css';
 
@@ -21,7 +21,8 @@ const ProjectsPage = () => {
           // Use type assertion since both types are compatible for display
           setProjects(data as unknown as ProjectListItem[]);
         } else {
-          const data = await projectService.getProjectsByProfile(PORTFOLIO_OWNER_PROFILE_ID);
+          const userId = await getPortfolioOwnerId();
+          const data = await projectService.getProjectsByUser(userId);
           setProjects(data.results);
         }
       } catch (error) {

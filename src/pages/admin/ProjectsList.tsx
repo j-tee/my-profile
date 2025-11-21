@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { FaPlus, FaEdit, FaTrash, FaEye } from 'react-icons/fa';
 import { projectService } from '../../services/project.service';
-import { PORTFOLIO_OWNER_PROFILE_ID } from '../../constants';
+import { getPortfolioOwnerId } from '../../utils/profileUtils';
 import type { ProjectListItem } from '../../types/project.types';
 import '../admin/AdminDashboard.css';
 
@@ -18,7 +18,8 @@ const ProjectsList: React.FC = () => {
 
   const loadProjects = async () => {
     try {
-      const data = await projectService.getProjectsByProfile(PORTFOLIO_OWNER_PROFILE_ID);
+      const userId = await getPortfolioOwnerId();
+      const data = await projectService.getProjectsByUser(userId);
       setProjects(data.results);
     } catch (error) {
       console.error('Failed to load projects:', error);

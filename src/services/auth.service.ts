@@ -35,7 +35,19 @@ export const authService = {
     return response.data;
   },
 
-  // Update user profile
+  // Get portfolio owner by user ID (public endpoint)
+  // This fetches the user who owns the portfolio site
+  // Since there's no dedicated public portfolio endpoint yet,
+  // we'll fetch directly using the user ID once available
+  getPortfolioOwnerById: async (userId: string): Promise<User> => {
+    // TODO: Backend needs to provide a public endpoint like:
+    // GET /api/users/{user_id}/public/ (no auth required)
+    // For now, this will fail without proper backend endpoint
+    const response = await apiClient.get<User>(`/users/${userId}/public/`);
+    return response.data;
+  },
+
+  // Update user profile (now includes portfolio fields)
   updateProfile: async (data: UpdateProfileRequest): Promise<User> => {
     const response = await apiClient.patch<User>('/auth/profile/', data);
     return response.data;

@@ -1,34 +1,55 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { FaGithub, FaLinkedin, FaEnvelope, FaArrowDown, FaCode, FaBriefcase, FaGraduationCap } from 'react-icons/fa';
-import { profileService } from '../services/profile.service';
-import { PORTFOLIO_OWNER_PROFILE_ID } from '../constants';
-import type { Profile } from '../types';
+import type { User } from '../types';
 import './HomePage.css';
 
 const HomePage = () => {
-  const [profile, setProfile] = useState<Profile | null>(null);
+  const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchProfile = async () => {
+    // TODO: Once backend provides a public endpoint to fetch portfolio owner user data
+    // (e.g., GET /api/users/{PORTFOLIO_OWNER_USER_ID}/public/), use that here
+    // For now, using static/fallback data since we don't need to authenticate
+    // to view the public portfolio homepage
+    
+    const loadPortfolioOwner = () => {
       try {
-        const data = await profileService.getProfile(PORTFOLIO_OWNER_PROFILE_ID);
-        setProfile(data);
-      } catch (error) {
-        console.error('Failed to fetch profile:', error);
+        // Static portfolio owner data
+        // In production, this should come from a public API endpoint
+        setUser({
+          id: 'portfolio-owner',
+          email: 'juliustetteh@gmail.com',
+          first_name: 'Julius',
+          last_name: 'Tetteh',
+          full_name: 'Julius Tetteh',
+          phone: null,
+          role: 'super_admin',
+          is_verified: true,
+          is_active: true,
+          mfa_enabled: false,
+          headline: 'Full Stack Developer',
+          summary: 'Building exceptional digital experiences with cutting-edge technologies. Check back soon for more information.',
+          city: 'Accra',
+          state: 'Greater Accra',
+          country: 'Ghana',
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString(),
+        });
+      } catch (err) {
+        console.error('Failed to load portfolio owner data:', err);
       } finally {
         setLoading(false);
       }
     };
 
-    fetchProfile();
+    loadPortfolioOwner();
   }, []);
 
   // Helper to get social link URL by platform
   const getSocialLink = (platform: 'github' | 'linkedin' | 'twitter' | 'portfolio' | 'other') => {
-    return profile?.social_links?.find(link => link.platform === platform)?.url || 
-           profile?.socialLinks?.find(link => link.platform === platform)?.url;
+    return user?.social_links?.find(link => link.platform === platform)?.url;
   };
 
   const scrollToSection = (sectionId: string) => {
@@ -53,11 +74,11 @@ const HomePage = () => {
             transition={{ delay: 0.3, type: "spring", stiffness: 200 }}
           >
             <div className="profile-image">
-              {profile?.profile_picture_url ? (
-                <img src={profile.profile_picture_url} alt={profile.full_name || 'Profile'} />
+              {user?.profile_picture_url ? (
+                <img src={user.profile_picture_url} alt={user.full_name || 'Profile'} />
               ) : (
                 <div className="profile-placeholder">
-                  {profile?.first_name?.[0]}{profile?.last_name?.[0]}
+                  {user?.first_name?.[0]}{user?.last_name?.[0]}
                 </div>
               )}
             </div>
@@ -69,7 +90,7 @@ const HomePage = () => {
             animate={{ opacity: 1 }}
             transition={{ delay: 0.5 }}
           >
-            {loading ? 'Loading...' : profile?.headline || 'Full Stack Developer'}
+            {loading ? 'Loading...' : user?.headline || 'Full Stack Developer'}
           </motion.h1>
 
           <motion.p 
@@ -78,7 +99,7 @@ const HomePage = () => {
             animate={{ opacity: 1 }}
             transition={{ delay: 0.7 }}
           >
-            {profile?.summary || 'Building exceptional digital experiences with cutting-edge technologies'}
+            {user?.summary || 'Building exceptional digital experiences with cutting-edge technologies'}
           </motion.p>
 
           <motion.div 
@@ -111,8 +132,8 @@ const HomePage = () => {
                 <FaLinkedin />
               </a>
             )}
-            {profile?.email && (
-              <a href={`mailto:${profile.email}`} className="social-icon">
+            {user?.email && (
+              <a href={`mailto:${user.email}`} className="social-icon">
                 <FaEnvelope />
               </a>
             )}
@@ -149,7 +170,7 @@ const HomePage = () => {
           <h2 className="section-title">About Me</h2>
           <div className="about-content">
             <p className="about-text">
-              {profile?.summary || "I'm a passionate full-stack developer with expertise in building scalable web applications. With a strong foundation in both frontend and backend technologies, I create seamless digital experiences that solve real-world problems."}
+              {user?.summary || "I'm a passionate full-stack developer with expertise in building scalable web applications. With a strong foundation in both frontend and backend technologies, I create seamless digital experiences that solve real-world problems."}
             </p>
             <div className="stats-grid">
               <div className="stat-card">

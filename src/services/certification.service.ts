@@ -11,15 +11,15 @@ const CERTIFICATION_ENDPOINT = '/certifications';
 
 export const certificationService = {
   /**
-   * Get all certifications for a profile
+   * Get all certifications for a user
    */
   getCertifications: async (
-    profileId: string, 
+    userId: string, 
     params?: QueryParams
   ): Promise<PaginatedResponse<Certification>> => {
     const response = await apiClient.get<PaginatedResponse<Certification>>(
       CERTIFICATION_ENDPOINT,
-      { params: { ...params, profile_id: profileId } }
+      { params: { ...params, user_id: userId } }
     );
     return response.data;
   },
@@ -27,10 +27,10 @@ export const certificationService = {
   /**
    * Get active certifications (not expired)
    */
-  getActiveCertifications: async (profileId: string): Promise<Certification[]> => {
+  getActiveCertifications: async (userId: string): Promise<Certification[]> => {
     const response = await apiClient.get<Certification[]>(
       `${CERTIFICATION_ENDPOINT}/active`,
-      { params: { profile_id: profileId } }
+      { params: { user_id: userId } }
     );
     return response.data;
   },

@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import { FaBriefcase, FaCalendar, FaMapMarkerAlt, FaUsers } from 'react-icons/fa';
 import { experienceService } from '../services/experience.service';
 import type { Experience } from '../types/experience.types';
-import { PORTFOLIO_OWNER_PROFILE_ID } from '../constants';
+import { getPortfolioOwnerId } from '../utils/profileUtils';
 import './HomePage.css';
 
 const ExperiencePage = () => {
@@ -16,7 +16,8 @@ const ExperiencePage = () => {
 
   const fetchExperiences = async () => {
     try {
-      const data = await experienceService.getExperiences(PORTFOLIO_OWNER_PROFILE_ID);
+      const profileId = await getPortfolioOwnerId();
+      const data = await experienceService.getExperiences(profileId);
       setExperiences(data.results);
     } catch (error) {
       console.error('Failed to fetch experiences:', error);

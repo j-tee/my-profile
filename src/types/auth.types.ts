@@ -1,8 +1,19 @@
 // User role types
 export type UserRole = 'super_admin' | 'editor' | 'viewer';
 
-// User interface
+// Social Link
+export interface SocialLink {
+  id: string;
+  user?: string;
+  platform: 'github' | 'linkedin' | 'twitter' | 'portfolio' | 'other';
+  url: string;
+  display_name?: string;
+  order?: number;
+}
+
+// User interface (now includes portfolio fields)
 export interface User {
+  // Identity & Auth
   id: string;
   email: string;
   first_name: string;
@@ -13,6 +24,20 @@ export interface User {
   is_verified: boolean;
   is_active: boolean;
   mfa_enabled: boolean;
+  
+  // Portfolio Fields (integrated from Profile model)
+  headline?: string;
+  summary?: string;
+  city?: string;
+  state?: string;
+  country?: string;
+  profile_picture?: string | null;
+  profile_picture_url?: string | null;
+  cover_image?: string | null;
+  cover_image_url?: string | null;
+  social_links?: SocialLink[];
+  
+  // Timestamps
   created_at: string;
   updated_at: string;
 }
@@ -60,11 +85,18 @@ export interface ChangePasswordRequest {
   new_password_confirm: string;
 }
 
-// Update profile request
+// Update profile request (now includes portfolio fields)
 export interface UpdateProfileRequest {
   first_name?: string;
   last_name?: string;
   phone?: string;
+  headline?: string;
+  summary?: string;
+  city?: string;
+  state?: string;
+  country?: string;
+  profile_picture?: string;
+  cover_image?: string;
 }
 
 // MFA Setup response

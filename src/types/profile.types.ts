@@ -1,3 +1,5 @@
+import type { SocialLink } from './auth.types';
+
 export interface Profile {
   // Identity & Basic Information
   id: string;
@@ -42,16 +44,6 @@ export interface Profile {
   updated_at?: string;             // Backend field
   createdAt?: string;              // Frontend alias
   updatedAt?: string;              // Frontend alias
-}
-
-export interface SocialLink {
-  id: string;
-  profile?: string;                // Profile UUID reference
-  platform: 'github' | 'linkedin' | 'twitter' | 'portfolio' | 'other';
-  url: string;
-  display_name?: string;           // Backend field
-  displayName?: string;            // Frontend alias
-  order?: number;                  // Display order (default 0)
 }
 
 export interface CreateProfileDTO {

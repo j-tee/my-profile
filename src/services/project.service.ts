@@ -35,12 +35,12 @@ export const projectService = {
   },
 
   /**
-   * Get projects by profile
-   * GET /api/projects/by_profile/{profile_id}/
+   * Get projects by user
+   * GET /api/projects/by_user/{user_id}/
    */
-  getProjectsByProfile: async (profileId: string, filters?: ProjectFilters): Promise<PaginatedProjectsResponse> => {
+  getProjectsByUser: async (userId: string, filters?: ProjectFilters): Promise<PaginatedProjectsResponse> => {
     const response = await apiClient.get<PaginatedProjectsResponse>(
-      `${PROJECT_ENDPOINT}/by_profile/${profileId}/`,
+      `${PROJECT_ENDPOINT}/by_user/${userId}/`,
       { params: filters }
     );
     return response.data;

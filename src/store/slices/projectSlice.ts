@@ -41,11 +41,11 @@ const toApiError = (payload: unknown): ApiError | null => (payload as ApiError |
 // Async thunks
 export const fetchProjects = createAsyncThunk<
   PaginatedResponse<ProjectListItem>,
-  { profileId: string; page?: number },
+  { userId: string; page?: number },
   { rejectValue: ApiError }
->('project/fetchProjects', async ({ profileId, page = 1 }, { rejectWithValue }) => {
+>('project/fetchProjects', async ({ userId, page = 1 }, { rejectWithValue }) => {
   try {
-    const result = await projectService.getProjectsByProfile(profileId, { page });
+    const result = await projectService.getProjectsByUser(userId, { page });
     return {
       results: result.results,
       count: result.count,

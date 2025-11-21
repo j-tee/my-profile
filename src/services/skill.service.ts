@@ -12,12 +12,12 @@ const SKILL_ENDPOINT = '/skills';
 
 export const skillService = {
   /**
-   * Get all skills for a profile
+   * Get all skills for a user
    */
-  getSkills: async (profileId: string, params?: QueryParams): Promise<PaginatedResponse<Skill>> => {
+  getSkills: async (userId: string, params?: QueryParams): Promise<PaginatedResponse<Skill>> => {
     const response = await apiClient.get<PaginatedResponse<Skill>>(
       SKILL_ENDPOINT,
-      { params: { ...params, profile_id: profileId } }
+      { params: { ...params, user_id: userId } }
     );
     return response.data;
   },
@@ -26,12 +26,12 @@ export const skillService = {
    * Get skills by category
    */
   getSkillsByCategory: async (
-    profileId: string, 
+    userId: string, 
     category: SkillCategory
   ): Promise<Skill[]> => {
     const response = await apiClient.get<Skill[]>(
       `${SKILL_ENDPOINT}/by-category`,
-      { params: { profile_id: profileId, category } }
+      { params: { user_id: userId, category } }
     );
     return response.data;
   },
