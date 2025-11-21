@@ -6,7 +6,7 @@ import './AuthPages.css';
 
 const RegisterPage: React.FC = () => {
   const navigate = useNavigate();
-  const { register, loading, error, clearError } = useAuth();
+  const { register, loading, error, clearError, profileSummary } = useAuth();
 
   const [formData, setFormData] = useState<RegisterRequest>({
     email: '',
@@ -72,7 +72,13 @@ const RegisterPage: React.FC = () => {
 
     try {
       await register(formData);
-      navigate('/');
+      
+      // Check if profile needs completion (it will for new registrations)
+      if (profileSummary && !profileSummary.is_complete) {
+        navigate('/complete-profile');
+      } else {
+        navigate('/');
+      }
     } catch (err: unknown) {
       // Handle field-specific errors from backend
       if (err && typeof err === 'object' && err !== null) {
