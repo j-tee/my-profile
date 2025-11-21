@@ -24,6 +24,11 @@
 
 ## 🎯 The Actual Use Case
 
+
+
+
+
+
 ### This is a PERSONAL PORTFOLIO WEBSITE, not a multi-user profile platform!
 
 **Think LinkedIn vs Personal Blog:**
