@@ -40,20 +40,10 @@ export interface RegisterRequest {
   phone?: string;
 }
 
-// Portfolio Profile (minimal from login response)
-export interface PortfolioProfileSummary {
-  id: string;
-  email: string;
-  full_name: string;
-  headline: string;
-  is_complete: boolean;
-}
-
-// Auth response
+// Auth response - NO profile field (visitors don't get portfolio profiles)
 export interface AuthResponse {
   message: string;
   user: User;
-  profile: PortfolioProfileSummary;
   tokens: AuthTokens;
 }
 

@@ -6,7 +6,7 @@ import './AuthPages.css';
 
 const LoginPage: React.FC = () => {
   const navigate = useNavigate();
-  const { login, loading, error, clearError, profileSummary } = useAuth();
+  const { login, loading, error, clearError } = useAuth();
 
   const [formData, setFormData] = useState<LoginRequest>({
     email: '',
@@ -50,12 +50,8 @@ const LoginPage: React.FC = () => {
 
       await login(loginData);
       
-      // Check if profile needs completion
-      if (profileSummary && !profileSummary.is_complete) {
-        navigate('/complete-profile');
-      } else {
-        navigate('/');
-      }
+      // Redirect to home - no profile completion needed
+      navigate('/');
     } catch (err: unknown) {
       // Check if MFA is required
       if (err && typeof err === 'object' && 'mfa_required' in err) {

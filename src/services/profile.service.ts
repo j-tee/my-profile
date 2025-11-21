@@ -2,8 +2,7 @@ import apiClient from './api';
 import type { 
   Profile, 
   CreateProfileDTO, 
-  UpdateProfileDTO, 
-  ApiResponse 
+  UpdateProfileDTO
 } from '../types';
 
 const PROFILE_ENDPOINT = '/profiles';
@@ -36,9 +35,9 @@ export const profileService = {
   },
 
   /**
-   * Update profile (uses /profiles/me/ for current user)
+   * Update profile (uses /profiles/me/ endpoint for current user)
    */
-  updateProfile: async (id: string, data: UpdateProfileDTO): Promise<Profile> => {
+  updateProfile: async (_id: string, data: UpdateProfileDTO): Promise<Profile> => {
     // Use /profiles/me/ endpoint for updating current user's profile
     const endpoint = `${PROFILE_ENDPOINT}/me/`;
     const response = await apiClient.patch<{ profile: Profile; is_complete: boolean; needs_update: boolean }>(endpoint, data);

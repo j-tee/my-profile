@@ -1,46 +1,57 @@
 export interface Profile {
+  // Identity & Basic Information
   id: string;
-  firstName?: string;
-  lastName?: string;
-  first_name: string;  // Backend compatibility
-  last_name: string;   // Backend compatibility
-  full_name?: string;  // Backend computed field
-  headline: string;
-  summary: string;
-  bio?: string;        // Backend field
+  first_name: string;              // Backend primary field
+  last_name: string;               // Backend primary field
+  firstName?: string;              // Frontend alias
+  lastName?: string;               // Frontend alias
+  full_name?: string;              // Backend computed property
   email: string;
-  phone?: string | null;
-  city: string;
-  state: string;
-  country: string;
-  location?: {         // Frontend convenience
+
+  // Professional Information (REQUIRED for completion)
+  headline: string;                // Max 255 chars, required for completion
+  summary: string;                 // Min 50 chars required for completion
+
+  // Contact Information
+  phone?: string | null;           // Optional, max 20 chars
+
+  // Location Information (REQUIRED for completion)
+  city: string;                    // Required for completion, default ''
+  state: string;                   // Required for completion, default ''
+  country: string;                 // Required for completion, default ''
+  location?: {                     // Frontend convenience wrapper
     city: string;
     state: string;
     country: string;
   };
-  profile_picture?: string | null;
-  profilePictureUrl?: string;
-  profile_picture_url?: string | null;  // Backend compatibility
-  cover_image?: string | null;
-  coverImageUrl?: string;
-  cover_image_url?: string | null;      // Backend compatibility
-  github_url?: string;           // Backend social links
-  linkedin_url?: string;         // Backend social links
-  twitter_url?: string;          // Backend social links
-  website_url?: string;          // Backend social links
-  socialLinks?: SocialLink[];
-  social_links?: SocialLink[];   // Backend compatibility
-  created_at?: string;           // Backend field
-  updated_at?: string;           // Backend field
-  createdAt?: string;
-  updatedAt?: string;
+
+  // Images
+  profile_picture?: string | null; // Backend field - upload path
+  cover_image?: string | null;     // Backend field - upload path
+  profilePictureUrl?: string;      // Frontend computed URL
+  coverImageUrl?: string;          // Frontend computed URL
+  profile_picture_url?: string | null;  // Backend URL field
+  cover_image_url?: string | null;      // Backend URL field
+
+  // Social Links (separate model, included in response)
+  social_links?: SocialLink[];     // Backend relationship
+  socialLinks?: SocialLink[];      // Frontend alias
+
+  // Timestamps
+  created_at?: string;             // Backend field
+  updated_at?: string;             // Backend field
+  createdAt?: string;              // Frontend alias
+  updatedAt?: string;              // Frontend alias
 }
 
 export interface SocialLink {
   id: string;
+  profile?: string;                // Profile UUID reference
   platform: 'github' | 'linkedin' | 'twitter' | 'portfolio' | 'other';
   url: string;
-  displayName?: string;
+  display_name?: string;           // Backend field
+  displayName?: string;            // Frontend alias
+  order?: number;                  // Display order (default 0)
 }
 
 export interface CreateProfileDTO {

@@ -10,39 +10,23 @@ import type {
   MFAVerifyRequest,
   MFADisableRequest,
 } from '../types/auth.types';
-import type { Profile } from '../types/profile.types';
 
 export const authService = {
   // Register new user
   register: async (data: RegisterRequest): Promise<AuthResponse> => {
     const response = await apiClient.post<AuthResponse>('/auth/register/', data);
-    const authData = response.data;
-    
-    // Store profile data from registration response
-    if (authData.profile) {
-      localStorage.setItem('portfolio_profile', JSON.stringify(authData.profile));
-    }
-    
-    return authData;
+    return response.data;
   },
 
   // Login user
   login: async (data: LoginRequest): Promise<AuthResponse> => {
     const response = await apiClient.post<AuthResponse>('/auth/login/', data);
-    const authData = response.data;
-    
-    // Store profile data from login response
-    if (authData.profile) {
-      localStorage.setItem('portfolio_profile', JSON.stringify(authData.profile));
-    }
-    
-    return authData;
+    return response.data;
   },
 
   // Logout user
   logout: (): void => {
     tokenManager.clearTokens();
-    localStorage.removeItem('portfolio_profile');
   },
 
   // Get current user profile (auth profile)
@@ -87,11 +71,5 @@ export const authService = {
   // Check if user is authenticated
   isAuthenticated: (): boolean => {
     return tokenManager.isAuthenticated();
-  },
-
-  // Get current user's portfolio profile (full profile data)
-  getMyPortfolioProfile: async (): Promise<Profile> => {
-    const response = await apiClient.get<Profile>('/auth/my-portfolio-profile/');
-    return response.data;
   },
 };

@@ -25,6 +25,12 @@ const HomePage = () => {
     fetchProfile();
   }, []);
 
+  // Helper to get social link URL by platform
+  const getSocialLink = (platform: 'github' | 'linkedin' | 'twitter' | 'portfolio' | 'other') => {
+    return profile?.social_links?.find(link => link.platform === platform)?.url || 
+           profile?.socialLinks?.find(link => link.platform === platform)?.url;
+  };
+
   const scrollToSection = (sectionId: string) => {
     document.getElementById(sectionId)?.scrollIntoView({ behavior: 'smooth' });
   };
@@ -72,7 +78,7 @@ const HomePage = () => {
             animate={{ opacity: 1 }}
             transition={{ delay: 0.7 }}
           >
-            {profile?.bio || 'Building exceptional digital experiences with cutting-edge technologies'}
+            {profile?.summary || 'Building exceptional digital experiences with cutting-edge technologies'}
           </motion.p>
 
           <motion.div 
@@ -95,13 +101,13 @@ const HomePage = () => {
             animate={{ opacity: 1 }}
             transition={{ delay: 1.1 }}
           >
-            {profile?.github_url && (
-              <a href={profile.github_url} target="_blank" rel="noopener noreferrer" className="social-icon">
+            {getSocialLink('github') && (
+              <a href={getSocialLink('github')} target="_blank" rel="noopener noreferrer" className="social-icon">
                 <FaGithub />
               </a>
             )}
-            {profile?.linkedin_url && (
-              <a href={profile.linkedin_url} target="_blank" rel="noopener noreferrer" className="social-icon">
+            {getSocialLink('linkedin') && (
+              <a href={getSocialLink('linkedin')} target="_blank" rel="noopener noreferrer" className="social-icon">
                 <FaLinkedin />
               </a>
             )}
@@ -143,7 +149,7 @@ const HomePage = () => {
           <h2 className="section-title">About Me</h2>
           <div className="about-content">
             <p className="about-text">
-              {profile?.bio || "I'm a passionate full-stack developer with expertise in building scalable web applications. With a strong foundation in both frontend and backend technologies, I create seamless digital experiences that solve real-world problems."}
+              {profile?.summary || "I'm a passionate full-stack developer with expertise in building scalable web applications. With a strong foundation in both frontend and backend technologies, I create seamless digital experiences that solve real-world problems."}
             </p>
             <div className="stats-grid">
               <div className="stat-card">
