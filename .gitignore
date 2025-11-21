@@ -22,3 +22,14 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Bash history files
+bash_history*
+.bash_history*
+
+# Environment and config files
+*.env.local
+.env
+
+# OS files
+Thumbs.db
