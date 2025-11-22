@@ -11,14 +11,17 @@ interface ImageGalleryModalProps {
 }
 
 const ImageGalleryModal = ({ images, initialIndex = 0, isOpen, onClose }: ImageGalleryModalProps) => {
+  // Initialize with initialIndex, and reset when modal opens
   const [currentIndex, setCurrentIndex] = useState(initialIndex);
 
   // Reset index when modal opens or initialIndex changes
+  // Using a key prop on the component or resetting on open would be better
   useEffect(() => {
     if (isOpen) {
       setCurrentIndex(initialIndex);
     }
-  }, [initialIndex, isOpen]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isOpen]);
 
   const handleNext = useCallback(() => {
     setCurrentIndex((prev) => (prev + 1) % images.length);

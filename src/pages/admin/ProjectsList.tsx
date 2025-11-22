@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { FaPlus, FaEdit, FaTrash, FaEye } from 'react-icons/fa';
@@ -13,11 +13,7 @@ const ProjectsList: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [deleting, setDeleting] = useState<string | null>(null);
 
-  useEffect(() => {
-    loadProjects();
-  }, [user]);
-
-  const loadProjects = async () => {
+  const loadProjects = useCallback(async () => {
     try {
       if (user?.id) {
         const data = await projectService.getProjectsByUser(user.id);
@@ -28,7 +24,11 @@ const ProjectsList: React.FC = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [user?.id]);
+
+  useEffect(() => {
+    loadProjects();
+  }, [loadProjects]);
 
   const handleDelete = async (id: string) => {
     if (!window.confirm('Are you sure you want to delete this project?')) {
