@@ -4,6 +4,7 @@ import { FaSave, FaArrowLeft } from 'react-icons/fa';
 import { projectService } from '../../services/project.service';
 import { useAuth } from '../../contexts/useAuth';
 import type { ProjectCreateRequest, ProjectDetail, ProjectMedia } from '../../types/project.types';
+import { toast } from 'react-toastify';
 import DateInput from '../../components/common/DateInput';
 import '../admin/AdminDashboard.css';
 
@@ -47,8 +48,8 @@ const ProjectForm: React.FC = () => {
 
   // Set user ID from auth context
   useEffect(() => {
-    if (user?.id) {
-      setFormData(prev => ({ ...prev, user: user.id }));
+      if (!user?.id) {
+        toast.error('User ID is required. Please make sure you are logged in.');
     }
   }, [user]);
 
@@ -90,7 +91,7 @@ const ProjectForm: React.FC = () => {
         }
       } catch (error) {
         console.error('Failed to load project:', error);
-        alert('Failed to load project');
+        toast.error('Failed to load project');
         navigate('/admin/projects');
       } finally {
         setLoadingData(false);
@@ -125,19 +126,19 @@ const ProjectForm: React.FC = () => {
       const isVideo = file.type.startsWith('video/');
       
       if (type === 'image' && !isImage) {
-        alert('Please select image files only');
+        toast.error('Please select image files only');
         return;
       }
       
       if (type === 'video' && !isVideo) {
-        alert('Please select video files only');
+        toast.error('Please select video files only');
         return;
       }
       
       // Validate file size
       const maxSize = type === 'image' ? 5 * 1024 * 1024 : 50 * 1024 * 1024; // 5MB for images, 50MB for videos
       if (file.size > maxSize) {
-        alert(`${type === 'image' ? 'Image' : 'Video'} size must be less than ${maxSize / (1024 * 1024)}MB`);
+        toast.error(`${type === 'image' ? 'Image' : 'Video'} size must be less than ${maxSize / (1024 * 1024)}MB`);
         return;
       }
       
@@ -281,7 +282,7 @@ const ProjectForm: React.FC = () => {
     try {
       // Validate required fields
       if (!formData.user) {
-        alert('User ID is required. Please make sure you are logged in.');
+        toast.error('User ID is required. Please make sure you are logged in.');
         return;
       }
 
@@ -308,14 +309,14 @@ const ProjectForm: React.FC = () => {
       }
 
       console.log('Project saved:', savedProject);
-      alert('Project saved successfully!');
+      toast.success('Project saved successfully!');
       navigate('/admin/projects');
     } catch (error) {
       console.error('Failed to save project:', error);
       const errorMessage = error && typeof error === 'object' && 'message' in error 
         ? (error as { message: string }).message 
         : 'Failed to save project. Please check all required fields.';
-      alert(errorMessage);
+      toast.error(errorMessage);
     } finally {
       setLoading(false);
     }
@@ -640,7 +641,7 @@ const ProjectForm: React.FC = () => {
                     const file = e.target.files?.[0];
                     if (file) {
                       if (file.size > 100 * 1024 * 1024) {
-                        alert('Video file must be less than 100MB');
+                        toast.error('Video file must be less than 100MB');
                         e.target.value = '';
                         return;
                       }
