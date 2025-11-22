@@ -17,16 +17,17 @@ const LoginPage: React.FC = () => {
   const [showMFA, setShowMFA] = useState(false);
   const [mfaToken, setMfaToken] = useState('');
   const [formErrors, setFormErrors] = useState<Record<string, string>>({});
-  const [successMessage, setSuccessMessage] = useState('');
+  // Initialize success message from navigation state
+  const [successMessage, setSuccessMessage] = useState(
+    (location.state as { message?: string })?.message || ''
+  );
 
   useEffect(() => {
-    // Check for success message from navigation state
+    // Clear the navigation state after reading
     if (location.state?.message) {
-      setSuccessMessage(location.state.message);
-      // Clear the state
       window.history.replaceState({}, document.title);
     }
-  }, [location]);
+  }, [location.state]);
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
