@@ -51,6 +51,10 @@
 
 ---
 
+
+
+
+
 ## 📋 What This Means for Frontend
 
 ### 1. Authentication Response Structure
