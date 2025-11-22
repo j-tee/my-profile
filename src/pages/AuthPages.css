@@ -164,6 +164,18 @@
   color: #2c5282;
   border: 1px solid #90cdf4;
 }
+.alert-close {
+  background: transparent;
+  border: none;
+  color: inherit;
+  font-size: 1rem;
+  cursor: pointer;
+  margin-left: auto;
+}
+
+.alert-close:hover {
+  opacity: 0.8;
+}
 
 .auth-footer {
   margin-top: 2rem;
