@@ -1,11 +1,12 @@
-import React, { useState, type FormEvent, type ChangeEvent } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import React, { useState, useEffect, type FormEvent, type ChangeEvent } from 'react';
+import { useNavigate, Link, useLocation } from 'react-router-dom';
 import { useAuth } from '../contexts/useAuth';
 import type { LoginRequest } from '../types/auth.types';
 import './AuthPages.css';
 
 const LoginPage: React.FC = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const { login, loading, error, clearError } = useAuth();
 
   const [formData, setFormData] = useState<LoginRequest>({
@@ -16,6 +17,16 @@ const LoginPage: React.FC = () => {
   const [showMFA, setShowMFA] = useState(false);
   const [mfaToken, setMfaToken] = useState('');
   const [formErrors, setFormErrors] = useState<Record<string, string>>({});
+  const [successMessage, setSuccessMessage] = useState('');
+
+  useEffect(() => {
+    // Check for success message from navigation state
+    if (location.state?.message) {
+      setSuccessMessage(location.state.message);
+      // Clear the state
+      window.history.replaceState({}, document.title);
+    }
+  }, [location]);
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -78,6 +89,12 @@ const LoginPage: React.FC = () => {
           <h1 className="auth-title">Welcome Back</h1>
           <p className="auth-subtitle">Sign in to your account</p>
 
+          {successMessage && (
+            <div className="alert alert-success">
+              {successMessage}
+            </div>
+          )}
+
           {error && (
             <div className="alert alert-error">
               {error}
@@ -117,6 +134,11 @@ const LoginPage: React.FC = () => {
               {formErrors.password && (
                 <span className="field-error">{formErrors.password}</span>
               )}
+              <div className="forgot-password-link">
+                <Link to="/forgot-password" className="auth-link">
+                  Forgot password?
+                </Link>
+              </div>
             </div>
 
             {showMFA && (

@@ -168,6 +168,8 @@
 .admin-page {
   max-width: 1400px;
   margin: 0 auto;
+  /* Prevent transform-based stacking context issues with date pickers */
+  transform: none;
 }
 
 .admin-header {
@@ -649,10 +651,23 @@
   gap: 1.5rem;
 }
 
+.admin-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.5rem;
+}
+
 .form-group {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
+  position: relative;
 }
 
 .form-group label {
@@ -662,22 +677,43 @@
 }
 
 .form-group input,
-.form-group select {
+.form-group select,
+.form-group textarea {
   padding: 0.75rem 1rem;
   border: 2px solid #e2e8f0;
   border-radius: 8px;
   font-size: 0.875rem;
   transition: all 0.2s;
+  font-family: inherit;
+}
+
+.form-group textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+.form-group input[type="date"] {
+  position: relative;
+  /* Fix for Chrome date picker positioning issues */
+  transform: none !important;
+}
+
+/* Ensure date picker dropdown appears correctly */
+.form-group input[type="date"]::-webkit-calendar-picker-indicator {
+  cursor: pointer;
+  z-index: 2;
 }
 
 .form-group input:focus,
-.form-group select:focus {
+.form-group select:focus,
+.form-group textarea:focus {
   outline: none;
   border-color: #667eea;
 }
 
 .form-group input:disabled,
-.form-group select:disabled {
+.form-group select:disabled,
+.form-group textarea:disabled {
   background: #f7fafc;
   cursor: not-allowed;
   opacity: 0.6;

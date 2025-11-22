@@ -3,7 +3,6 @@ import { motion } from 'framer-motion';
 import { FaStar, FaCode, FaTools, FaComments } from 'react-icons/fa';
 import { skillService } from '../services/skill.service';
 import type { Skill } from '../types/skill.types';
-import { getPortfolioOwnerId } from '../utils/profileUtils';
 import './HomePage.css';
 
 const SkillsPage = () => {
@@ -17,8 +16,7 @@ const SkillsPage = () => {
 
   const fetchSkills = async () => {
     try {
-      const profileId = await getPortfolioOwnerId();
-      const data = await skillService.getSkills(profileId);
+      const data = await skillService.getAllSkills();
       setSkills(data.results);
     } catch (error) {
       console.error('Failed to fetch skills:', error);

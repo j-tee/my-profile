@@ -3,7 +3,6 @@ import { motion } from 'framer-motion';
 import { FaCertificate, FaExternalLinkAlt, FaCalendar, FaCheckCircle } from 'react-icons/fa';
 import { certificationService } from '../services/certification.service';
 import type { Certification } from '../types/certification.types';
-import { getPortfolioOwnerId } from '../utils/profileUtils';
 import './HomePage.css';
 
 const CertificationsPage = () => {
@@ -16,8 +15,7 @@ const CertificationsPage = () => {
 
   const fetchCertifications = async () => {
     try {
-      const profileId = await getPortfolioOwnerId();
-      const data = await certificationService.getCertifications(profileId);
+      const data = await certificationService.getAllCertifications();
       setCertifications(data.results);
     } catch (error) {
       console.error('Failed to fetch certifications:', error);

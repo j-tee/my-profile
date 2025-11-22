@@ -3,24 +3,26 @@ import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { FaPlus, FaEdit, FaTrash, FaEye } from 'react-icons/fa';
 import { projectService } from '../../services/project.service';
-import { getPortfolioOwnerId } from '../../utils/profileUtils';
+import { useAuth } from '../../contexts/useAuth';
 import type { ProjectListItem } from '../../types/project.types';
 import '../admin/AdminDashboard.css';
 
 const ProjectsList: React.FC = () => {
+  const { user } = useAuth();
   const [projects, setProjects] = useState<ProjectListItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [deleting, setDeleting] = useState<string | null>(null);
 
   useEffect(() => {
     loadProjects();
-  }, []);
+  }, [user]);
 
   const loadProjects = async () => {
     try {
-      const userId = await getPortfolioOwnerId();
-      const data = await projectService.getProjectsByUser(userId);
-      setProjects(data.results);
+      if (user?.id) {
+        const data = await projectService.getProjectsByUser(user.id);
+        setProjects(data.results);
+      }
     } catch (error) {
       console.error('Failed to load projects:', error);
     } finally {

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FaTimes, FaChevronLeft, FaChevronRight } from 'react-icons/fa';
 import './ImageGalleryModal.css';
@@ -13,9 +13,20 @@ interface ImageGalleryModalProps {
 const ImageGalleryModal = ({ images, initialIndex = 0, isOpen, onClose }: ImageGalleryModalProps) => {
   const [currentIndex, setCurrentIndex] = useState(initialIndex);
 
+  // Reset index when modal opens or initialIndex changes
   useEffect(() => {
-    setCurrentIndex(initialIndex);
+    if (isOpen) {
+      setCurrentIndex(initialIndex);
+    }
   }, [initialIndex, isOpen]);
+
+  const handleNext = useCallback(() => {
+    setCurrentIndex((prev) => (prev + 1) % images.length);
+  }, [images.length]);
+
+  const handlePrevious = useCallback(() => {
+    setCurrentIndex((prev) => (prev - 1 + images.length) % images.length);
+  }, [images.length]);
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -32,7 +43,7 @@ const ImageGalleryModal = ({ images, initialIndex = 0, isOpen, onClose }: ImageG
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [isOpen, currentIndex]);
+  }, [isOpen, handleNext, handlePrevious, onClose]);
 
   // Prevent body scroll when modal is open
   useEffect(() => {
@@ -45,14 +56,6 @@ const ImageGalleryModal = ({ images, initialIndex = 0, isOpen, onClose }: ImageG
       document.body.style.overflow = 'unset';
     };
   }, [isOpen]);
-
-  const handleNext = () => {
-    setCurrentIndex((prev) => (prev + 1) % images.length);
-  };
-
-  const handlePrevious = () => {
-    setCurrentIndex((prev) => (prev - 1 + images.length) % images.length);
-  };
 
   const handleBackdropClick = (e: React.MouseEvent) => {
     if (e.target === e.currentTarget) {

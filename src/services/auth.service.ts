@@ -84,4 +84,42 @@ export const authService = {
   isAuthenticated: (): boolean => {
     return tokenManager.isAuthenticated();
   },
+
+  // Email Verification
+  verifyEmail: async (token: string): Promise<{ message: string; user: User }> => {
+    const response = await apiClient.post<{ message: string; user: User }>(
+      '/auth/verify-email/',
+      { token }
+    );
+    return response.data;
+  },
+
+  resendVerification: async (email: string): Promise<{ message: string }> => {
+    const response = await apiClient.post<{ message: string }>(
+      '/auth/resend-verification/',
+      { email }
+    );
+    return response.data;
+  },
+
+  // Password Reset
+  requestPasswordReset: async (email: string): Promise<{ message: string }> => {
+    const response = await apiClient.post<{ message: string }>(
+      '/auth/password/reset/',
+      { email }
+    );
+    return response.data;
+  },
+
+  resetPassword: async (token: string, newPassword: string, confirmPassword: string): Promise<{ message: string }> => {
+    const response = await apiClient.post<{ message: string }>(
+      '/auth/password/reset/confirm/',
+      {
+        token,
+        new_password: newPassword,
+        new_password_confirm: confirmPassword,
+      }
+    );
+    return response.data;
+  },
 };

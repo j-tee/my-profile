@@ -4,6 +4,7 @@ import { FaSave, FaArrowLeft } from 'react-icons/fa';
 import { projectService } from '../../services/project.service';
 import { useAuth } from '../../contexts/useAuth';
 import type { ProjectCreateRequest, ProjectDetail, ProjectMedia } from '../../types/project.types';
+import DateInput from '../../components/common/DateInput';
 import '../admin/AdminDashboard.css';
 
 const ProjectForm: React.FC = () => {
@@ -470,31 +471,31 @@ const ProjectForm: React.FC = () => {
           </div>
 
           <div className="form-row">
-            <div className="form-group">
-              <label htmlFor="start_date">Start Date *</label>
-              <input
-                type="date"
-                id="start_date"
-                name="start_date"
-                value={formData.start_date}
-                onChange={handleChange}
-                required
-              />
-            </div>
+            <DateInput
+              id="start_date"
+              name="start_date"
+              value={formData.start_date}
+              onChange={(date) => setFormData(prev => ({ ...prev, start_date: date }))}
+              required
+              label="Start Date"
+              placeholder="Select start date"
+            />
 
-            <div className="form-group">
-              <label htmlFor="end_date">End Date {!formData.current && '*'}</label>
-              <input
-                type="date"
+            <div className="form-group" style={{ position: 'relative' }}>
+              <DateInput
                 id="end_date"
                 name="end_date"
-                value={formData.end_date}
-                onChange={handleChange}
+                value={formData.end_date || ''}
+                onChange={(date) => setFormData(prev => ({ ...prev, end_date: date }))}
                 required={!formData.current}
                 disabled={formData.current}
+                label="End Date"
+                placeholder="Select end date"
               />
               {formData.current && (
-                <small style={{ color: '#718096' }}>Disabled for current projects</small>
+                <small style={{ color: '#718096', display: 'block', marginTop: '0.25rem' }}>
+                  Disabled for current projects
+                </small>
               )}
             </div>
           </div>

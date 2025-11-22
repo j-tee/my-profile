@@ -73,8 +73,12 @@ const RegisterPage: React.FC = () => {
     try {
       await register(formData);
       
-      // Redirect to home - visitors don't need profile completion
-      navigate('/');
+      // Show success message and redirect to login
+      navigate('/login', { 
+        state: { 
+          message: 'Registration successful! Please check your email to verify your account.' 
+        } 
+      });
     } catch (err: unknown) {
       // Handle field-specific errors from backend
       if (err && typeof err === 'object' && err !== null) {

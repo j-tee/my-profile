@@ -117,6 +117,43 @@ export interface MFADisableRequest {
   password: string;
 }
 
+// Email Verification
+export interface VerifyEmailRequest {
+  token: string;
+}
+
+export interface VerifyEmailResponse {
+  message: string;
+  user: User;
+}
+
+export interface ResendVerificationRequest {
+  email: string;
+}
+
+export interface ResendVerificationResponse {
+  message: string;
+}
+
+// Password Reset
+export interface RequestPasswordResetRequest {
+  email: string;
+}
+
+export interface RequestPasswordResetResponse {
+  message: string;
+}
+
+export interface ResetPasswordRequest {
+  token: string;
+  new_password: string;
+  new_password_confirm: string;
+}
+
+export interface ResetPasswordResponse {
+  message: string;
+}
+
 // API Error (use the one from api.types.ts instead)
 // export interface ApiError {
 //   detail?: string;
