@@ -17,7 +17,6 @@ const LoginPage: React.FC = () => {
   const [showMFA, setShowMFA] = useState(false);
   const [mfaToken, setMfaToken] = useState('');
   const [formErrors, setFormErrors] = useState<Record<string, string>>({});
-  // Initialize success message from navigation state
   const [successMessage, setSuccessMessage] = useState(
     (location.state as { message?: string })?.message || ''
   );
@@ -102,7 +101,15 @@ const LoginPage: React.FC = () => {
 
           {successMessage && (
             <div className="alert alert-success">
-              {successMessage}
+              <span>{successMessage}</span>
+              <button
+                type="button"
+                aria-label="Dismiss success message"
+                className="alert-close"
+                onClick={() => setSuccessMessage('')}
+              >
+                ×
+              </button>
             </div>
           )}
 
