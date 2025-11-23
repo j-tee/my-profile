@@ -22,7 +22,7 @@ const formatDate = (value?: string | null) => {
     if (diffDays < 7) return `${diffDays}d ago`;
     
     return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
-  } catch (error) {
+  } catch {
     return value;
   }
 };

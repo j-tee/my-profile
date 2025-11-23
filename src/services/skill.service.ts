@@ -115,27 +115,29 @@ const serializeSkillPayload = (payload: CreateSkillDTO | UpdateSkillDTO) => {
 };
 
 const mapPaginatedSkillResponse = (
-  payload: Record<string, any>
+  payload: Record<string, unknown>
 ): PaginatedResponse<Skill> => {
   const results = Array.isArray(payload.results)
     ? payload.results.map(mapSkillResponse)
     : [];
 
   const pageSizeCandidate =
-    payload.pageSize ?? payload.page_size ?? (results.length > 0 ? results.length : 1);
+    (payload.pageSize as number) ?? (payload.page_size as number) ?? (results.length > 0 ? results.length : 1);
+
+  const count = (payload.count as number) ?? results.length;
 
   return {
     results,
-    count: payload.count ?? results.length,
-    next: payload.next ?? undefined,
-    previous: payload.previous ?? undefined,
-    page: payload.page ?? payload.current ?? 1,
+    count,
+    next: (payload.next as string) ?? undefined,
+    previous: (payload.previous as string) ?? undefined,
+    page: (payload.page as number) ?? (payload.current as number) ?? 1,
     pageSize: pageSizeCandidate,
     totalPages:
-      payload.totalPages ??
-      payload.total_pages ??
-      (payload.count && pageSizeCandidate
-        ? Math.max(1, Math.ceil(payload.count / pageSizeCandidate))
+      (payload.totalPages as number) ??
+      (payload.total_pages as number) ??
+      (count && pageSizeCandidate
+        ? Math.max(1, Math.ceil(count / pageSizeCandidate))
         : 1),
   };
 };
@@ -165,7 +167,7 @@ export const skillService = {
    */
   getSkills: async (userId: string, params?: QueryParams): Promise<PaginatedResponse<Skill>> => {
     const response = await apiClient.get(SKILL_LIST_URL, {
-      params: serializeQueryParams({ ...params, user: userId }),
+      params: { ...serializeQueryParams(params), user: userId },
     });
     return mapPaginatedSkillResponse(response.data);
   },
@@ -210,7 +212,7 @@ export const skillService = {
     );
     return mapSkillResponse(response.data ?? {});
   },
-  
+
 
   /**
    * Delete skill
