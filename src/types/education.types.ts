@@ -1,6 +1,7 @@
+import type { Certification } from './certification.types';
+
 export interface Education {
   id: string;
-  import type { Certification } from './certification.types';
   profile?: string;
   profileId?: string;
   institution: string;
@@ -21,10 +22,10 @@ export interface Education {
   relevant_courses?: string[];
   order?: number;
   certificate_count?: number;
-  certificates?: EducationCertificate[];
+  certifications?: Certification[];
   created_at?: string;
-    certificate_count?: number;
-    certifications?: Certification[];
+  createdAt?: string;
+  updated_at?: string;
   updatedAt?: string;
 }
 

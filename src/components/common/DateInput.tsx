@@ -32,7 +32,7 @@ const MONTH_NAMES = [
 const getYearRange = (referenceYear: number) => {
   const currentYear = new Date().getFullYear();
   let startYear = Math.min(referenceYear, currentYear) - 60;
-  let endYear = Math.max(referenceYear, currentYear) + 40;
+  const endYear = Math.max(referenceYear, currentYear) + 40;
 
   if (startYear < 1900) {
     startYear = 1900;

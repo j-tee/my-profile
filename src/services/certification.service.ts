@@ -46,7 +46,7 @@ const toSkillsArray = (value: unknown): string[] => {
   return [];
 };
 
-const mapCertificationResponse = (payload: Record<string, any>): Certification => {
+const mapCertificationResponse = (payload: Record<string, unknown>): Certification => {
   const issueDate = (payload.issue_date ?? payload.issueDate ?? '') as string;
   const expirationDate =
     (payload.expiration_date ?? payload.expirationDate ?? null) as string | null;
@@ -84,7 +84,7 @@ const mapCertificationResponse = (payload: Record<string, any>): Certification =
 };
 
 const mapPaginatedCertifications = (
-  payload: Record<string, any>
+  payload: Record<string, unknown>
 ): PaginatedResponse<Certification> => {
   const results = Array.isArray(payload.results)
     ? payload.results.map(mapCertificationResponse)

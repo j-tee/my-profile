@@ -57,7 +57,7 @@ const toNumber = (value: unknown, fallback = 0) => {
   return fallback;
 };
 
-const mapExperienceResponse = (payload: Record<string, any>): Experience => {
+const mapExperienceResponse = (payload: Record<string, unknown>): Experience => {
   const employmentType = normalizeEmploymentType(payload.employment_type ?? payload.employmentType);
   const locationType = normalizeLocationType(payload.location_type ?? payload.locationType);
   const startDate = (payload.start_date ?? payload.startDate ?? '') as string;
@@ -93,7 +93,7 @@ const mapExperienceResponse = (payload: Record<string, any>): Experience => {
   };
 };
 
-const mapPaginatedExperiences = (payload: Record<string, any>): PaginatedResponse<Experience> => {
+const mapPaginatedExperiences = (payload: Record<string, unknown>): PaginatedResponse<Experience> => {
   const results = Array.isArray(payload.results)
     ? payload.results.map(mapExperienceResponse)
     : [];

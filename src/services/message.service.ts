@@ -28,46 +28,46 @@ const serializeQueryParams = (
   return { ...rest, page_size: pageSize };
 };
 
-const mapMessageResponse = (payload: Record<string, any>): Message => {
+const mapMessageResponse = (payload: Record<string, unknown>): Message => {
   return {
     id: String(payload.id ?? ''),
-    sender: payload.sender ?? undefined,
-    sender_name: payload.sender_name ?? payload.senderName ?? undefined,
-    senderName: payload.sender_name ?? payload.senderName ?? undefined,
-    sender_email: payload.sender_email ?? payload.senderEmail ?? undefined,
-    senderEmail: payload.sender_email ?? payload.senderEmail ?? undefined,
-    message_type: payload.message_type ?? payload.messageType ?? 'general',
-    messageType: payload.message_type ?? payload.messageType ?? 'general',
-    subject: payload.subject ?? '',
-    message: payload.message ?? '',
-    project_budget: payload.project_budget ?? payload.projectBudget ?? null,
-    projectBudget: payload.project_budget ?? payload.projectBudget ?? null,
-    project_timeline: payload.project_timeline ?? payload.projectTimeline ?? null,
-    projectTimeline: payload.project_timeline ?? payload.projectTimeline ?? null,
-    attachments: Array.isArray(payload.attachments) ? payload.attachments : [],
-    status: payload.status ?? 'new',
-    priority: payload.priority ?? false,
-    admin_notes: payload.admin_notes ?? payload.adminNotes ?? null,
-    adminNotes: payload.admin_notes ?? payload.adminNotes ?? null,
-    responded_by: payload.responded_by ?? payload.respondedBy ?? null,
-    respondedBy: payload.responded_by ?? payload.respondedBy ?? null,
-    replied_by_name: payload.replied_by_name ?? payload.repliedByName ?? null,
-    repliedByName: payload.replied_by_name ?? payload.repliedByName ?? null,
-    response_message: payload.response_message ?? payload.responseMessage ?? null,
-    responseMessage: payload.response_message ?? payload.responseMessage ?? null,
-    responded_at: payload.responded_at ?? payload.respondedAt ?? null,
-    respondedAt: payload.responded_at ?? payload.respondedAt ?? null,
-    reply_count: typeof payload.reply_count === 'number' ? payload.reply_count : (payload.replyCount ?? 0),
-    replyCount: typeof payload.reply_count === 'number' ? payload.reply_count : (payload.replyCount ?? 0),
-    created_at: payload.created_at ?? payload.createdAt ?? undefined,
-    createdAt: payload.created_at ?? payload.createdAt ?? undefined,
-    updated_at: payload.updated_at ?? payload.updatedAt ?? undefined,
-    updatedAt: payload.updated_at ?? payload.updatedAt ?? undefined,
+    sender: typeof payload.sender === 'string' ? payload.sender : undefined,
+    sender_name: typeof payload.sender_name === 'string' ? payload.sender_name : (typeof payload.senderName === 'string' ? payload.senderName : undefined),
+    senderName: typeof payload.sender_name === 'string' ? payload.sender_name : (typeof payload.senderName === 'string' ? payload.senderName : undefined),
+    sender_email: typeof payload.sender_email === 'string' ? payload.sender_email : (typeof payload.senderEmail === 'string' ? payload.senderEmail : undefined),
+    senderEmail: typeof payload.sender_email === 'string' ? payload.sender_email : (typeof payload.senderEmail === 'string' ? payload.senderEmail : undefined),
+    message_type: (payload.message_type ?? payload.messageType ?? 'general') as Message['messageType'],
+    messageType: (payload.message_type ?? payload.messageType ?? 'general') as Message['messageType'],
+    subject: typeof payload.subject === 'string' ? payload.subject : '',
+    message: typeof payload.message === 'string' ? payload.message : '',
+    project_budget: typeof payload.project_budget === 'string' ? payload.project_budget : (typeof payload.projectBudget === 'string' ? payload.projectBudget : null),
+    projectBudget: typeof payload.project_budget === 'string' ? payload.project_budget : (typeof payload.projectBudget === 'string' ? payload.projectBudget : null),
+    project_timeline: typeof payload.project_timeline === 'string' ? payload.project_timeline : (typeof payload.projectTimeline === 'string' ? payload.projectTimeline : null),
+    projectTimeline: typeof payload.project_timeline === 'string' ? payload.project_timeline : (typeof payload.projectTimeline === 'string' ? payload.projectTimeline : null),
+    attachments: Array.isArray(payload.attachments) ? payload.attachments.filter((item): item is string => typeof item === 'string') : [],
+    status: (payload.status ?? 'new') as Message['status'],
+    priority: payload.priority as Message['priority'],
+    admin_notes: typeof payload.admin_notes === 'string' ? payload.admin_notes : (typeof payload.adminNotes === 'string' ? payload.adminNotes : null),
+    adminNotes: typeof payload.admin_notes === 'string' ? payload.admin_notes : (typeof payload.adminNotes === 'string' ? payload.adminNotes : null),
+    responded_by: typeof payload.responded_by === 'string' ? payload.responded_by : (typeof payload.respondedBy === 'string' ? payload.respondedBy : null),
+    respondedBy: typeof payload.responded_by === 'string' ? payload.responded_by : (typeof payload.respondedBy === 'string' ? payload.respondedBy : null),
+    replied_by_name: typeof payload.replied_by_name === 'string' ? payload.replied_by_name : (typeof payload.repliedByName === 'string' ? payload.repliedByName : null),
+    repliedByName: typeof payload.replied_by_name === 'string' ? payload.replied_by_name : (typeof payload.repliedByName === 'string' ? payload.repliedByName : null),
+    response_message: typeof payload.response_message === 'string' ? payload.response_message : (typeof payload.responseMessage === 'string' ? payload.responseMessage : null),
+    responseMessage: typeof payload.response_message === 'string' ? payload.response_message : (typeof payload.responseMessage === 'string' ? payload.responseMessage : null),
+    responded_at: typeof payload.responded_at === 'string' ? payload.responded_at : (typeof payload.respondedAt === 'string' ? payload.respondedAt : null),
+    respondedAt: typeof payload.responded_at === 'string' ? payload.responded_at : (typeof payload.respondedAt === 'string' ? payload.respondedAt : null),
+    reply_count: typeof payload.reply_count === 'number' ? payload.reply_count : (typeof payload.replyCount === 'number' ? payload.replyCount : 0),
+    replyCount: typeof payload.reply_count === 'number' ? payload.reply_count : (typeof payload.replyCount === 'number' ? payload.replyCount : 0),
+    created_at: typeof payload.created_at === 'string' ? payload.created_at : (typeof payload.createdAt === 'string' ? payload.createdAt : undefined),
+    createdAt: typeof payload.created_at === 'string' ? payload.created_at : (typeof payload.createdAt === 'string' ? payload.createdAt : undefined),
+    updated_at: typeof payload.updated_at === 'string' ? payload.updated_at : (typeof payload.updatedAt === 'string' ? payload.updatedAt : undefined),
+    updatedAt: typeof payload.updated_at === 'string' ? payload.updated_at : (typeof payload.updatedAt === 'string' ? payload.updatedAt : undefined),
   };
 };
 
 const mapPaginatedMessages = (
-  payload: Record<string, any>
+  payload: Record<string, unknown>
 ): PaginatedResponse<Message> => {
   const results = Array.isArray(payload.results)
     ? payload.results.map(mapMessageResponse)

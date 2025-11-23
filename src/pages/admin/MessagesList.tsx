@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { FaEnvelope, FaTrash, FaEye, FaReply, FaClock, FaCheckCircle, FaExclamationCircle } from 'react-icons/fa';
 import { messageService } from '../../services/message.service';
@@ -76,8 +76,8 @@ const MessagesList: React.FC = () => {
 
       const response = await messageService.getAllMessages(params);
       setMessages(response.results ?? []);
-    } catch (error) {
-      console.error('Failed to load messages:', error);
+    } catch {
+      console.error('Failed to load messages');
       toast.error('Failed to load messages. Please try again.');
     } finally {
       setLoading(false);
