@@ -1,11 +1,17 @@
 import apiClient from './api';
 import type {
-  EducationCertificate,
-  CreateEducationCertificateDTO,
-  UpdateEducationCertificateDTO,
+  // EducationCertificate,
+  // CreateEducationCertificateDTO,
+  // UpdateEducationCertificateDTO,
   PaginatedResponse,
   QueryParams,
 } from '../types';
+
+// Legacy types - these don't exist in the types folder anymore
+// This service is deprecated and should not be used
+type EducationCertificate = unknown;
+type CreateEducationCertificateDTO = unknown;
+type UpdateEducationCertificateDTO = unknown;
 
 const CERTIFICATE_BASE_PATH = '/education/certificates';
 const CERTIFICATE_LIST_URL = `${CERTIFICATE_BASE_PATH}/`;

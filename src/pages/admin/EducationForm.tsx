@@ -629,7 +629,7 @@ const EducationForm: React.FC = () => {
                   <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                     {(certification.credentialUrl ?? certification.credential_url) && (
                       <a
-                        href={certification.credentialUrl ?? certification.credential_url}
+                        href={(certification.credentialUrl ?? certification.credential_url) || undefined}
                         target="_blank"
                         rel="noreferrer"
                         className="btn-admin btn-admin-secondary"
