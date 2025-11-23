@@ -184,11 +184,11 @@ const EducationPage = () => {
                                   }}
                                 >
                                   <div>
-                                    <div style={{ fontWeight: 600 }}>{certificate.title}</div>
+                                    <div style={{ fontWeight: 600 }}>{certificate.name}</div>
                                     <div style={{ color: '#4a5568', fontSize: '0.9rem' }}>{certificate.issuer}</div>
-                                    {certificate.issued_date && (
+                                    {certificate.issue_date && (
                                       <div style={{ color: '#718096', fontSize: '0.8rem', marginTop: '0.25rem' }}>
-                                        Issued {new Date(certificate.issued_date).toLocaleDateString('en-US', {
+                                        Issued {new Date(certificate.issue_date).toLocaleDateString('en-US', {
                                           month: 'short',
                                           year: 'numeric',
                                         })}

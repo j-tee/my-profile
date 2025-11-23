@@ -119,7 +119,7 @@ const mapPaginatedExperiences = (payload: Record<string, unknown>): PaginatedRes
   };
 };
 
-const serializeQueryParams = (params?: QueryParams & Record<string, unknown>) => {
+const serializeQueryParams = (params?: QueryParams): Record<string, unknown> | undefined => {
   if (!params) return undefined;
   const { pageSize, ...rest } = params;
   if (pageSize === undefined) return rest;
@@ -217,7 +217,7 @@ export const experienceService = {
     params?: QueryParams
   ): Promise<PaginatedResponse<Experience>> => {
     const response = await apiClient.get(EXPERIENCE_LIST_URL, {
-      params: serializeQueryParams({ ...params, profile: profileId }),
+      params: { ...serializeQueryParams(params), profile: profileId },
     });
     return mapPaginatedExperiences(response.data ?? {});
   },
