@@ -210,6 +210,7 @@ export const skillService = {
     );
     return mapSkillResponse(response.data ?? {});
   },
+  
 
   /**
    * Delete skill
