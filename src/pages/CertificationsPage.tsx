@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { FaCertificate, FaExternalLinkAlt, FaCalendar, FaCheckCircle } from 'react-icons/fa';
 import { certificationService } from '../services/certification.service';
+import { PORTFOLIO_OWNER_PROFILE_ID } from '../constants/index';
 import type { Certification } from '../types/certification.types';
 import './HomePage.css';
 
@@ -15,7 +16,10 @@ const CertificationsPage = () => {
 
   const fetchCertifications = async () => {
     try {
-      const data = await certificationService.getAllCertifications();
+      const data = await certificationService.getCertificationsForProfile(
+        PORTFOLIO_OWNER_PROFILE_ID,
+        { ordering: 'order,-issue_date', pageSize: 50 }
+      );
       setCertifications(data.results);
     } catch (error) {
       console.error('Failed to fetch certifications:', error);

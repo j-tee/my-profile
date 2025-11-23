@@ -57,7 +57,7 @@
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   border-bottom: none;
   border-radius: 10px 10px 0 0;
-  padding-top: 1rem;
+  padding: 1rem 0 0.5rem;
 }
 
 .react-datepicker__current-month,
@@ -107,22 +107,112 @@
   border-color: #edf2f7;
 }
 
-.react-datepicker__month-select,
-.react-datepicker__year-select {
-  padding: 0.25rem 0.5rem;
-  border-radius: 6px;
-  border: 1px solid rgba(255, 255, 255, 0.3);
+
+.datepicker-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 1rem 0.5rem;
+  color: white;
+  gap: 0.75rem;
+}
+
+.datepicker-header-controls {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.datepicker-nav-btn {
   background: rgba(255, 255, 255, 0.2);
+  border: none;
+  color: white;
+  font-size: 1.5rem;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.2s;
+}
+
+.datepicker-nav-btn:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.35);
+  transform: translateY(-1px);
+}
+
+.datepicker-nav-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.datepicker-dropdown {
+  position: relative;
+}
+
+.datepicker-select-trigger {
+  padding: 0.4rem 0.85rem;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  background: rgba(255, 255, 255, 0.15);
   color: white;
   font-weight: 600;
   cursor: pointer;
-  margin: 0 0.25rem;
+  font-size: 0.85rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  transition: background 0.2s, border-color 0.2s;
 }
 
-.react-datepicker__month-select:focus,
-.react-datepicker__year-select:focus {
-  outline: none;
-  border-color: white;
+.datepicker-select-trigger:hover {
+  background: rgba(255, 255, 255, 0.3);
+  border-color: rgba(255, 255, 255, 0.6);
+}
+
+.datepicker-caret {
+  font-size: 0.75rem;
+}
+
+.datepicker-select-menu {
+  position: absolute;
+  top: calc(100% + 0.5rem);
+  left: 0;
+  background: white;
+  color: #1a202c;
+  list-style: none;
+  margin: 0;
+  padding: 0.5rem 0;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  max-height: 220px;
+  overflow-y: auto;
+  min-width: 140px;
+  z-index: 20;
+}
+
+.datepicker-select-menu li button {
+  width: 100%;
+  padding: 0.4rem 1rem;
+  border: none;
+  background: transparent;
+  text-align: left;
+  font-size: 0.85rem;
+  cursor: pointer;
+  color: #2d3748;
+  transition: background 0.2s, color 0.2s;
+}
+
+.datepicker-select-menu li button:hover {
+  background: #edf2f7;
+}
+
+.datepicker-select-menu li button.active {
+  background: #667eea;
+  color: white;
+  font-weight: 600;
 }
 
 .react-datepicker__triangle {

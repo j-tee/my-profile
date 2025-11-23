@@ -1,3 +1,5 @@
+import type { Certification } from './certification.types';
+
 export interface Education {
   id: string;
   profile?: string;
@@ -19,6 +21,8 @@ export interface Education {
   achievements?: string[];
   relevant_courses?: string[];
   order?: number;
+  certificate_count?: number;
+  certifications?: Certification[];
   created_at?: string;
   createdAt?: string;
   updated_at?: string;
@@ -42,6 +46,9 @@ export interface CreateEducationDTO {
   activities?: string[];
   achievements?: string[];
   relevant_courses?: string[];
+  order?: number;
 }
 
 export type UpdateEducationDTO = Partial<CreateEducationDTO>;
+
+export type EducationWithCertifications = Education & { certifications?: Certification[] };

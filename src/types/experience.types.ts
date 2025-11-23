@@ -50,6 +50,7 @@ export interface CreateExperienceDTO {
   responsibilities?: string[];
   achievements?: string[];
   technologies?: string[];
+  order?: number;
 }
 
 export type UpdateExperienceDTO = Partial<CreateExperienceDTO>;
