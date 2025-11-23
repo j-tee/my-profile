@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { FaGraduationCap, FaCalendar, FaMapMarkerAlt } from 'react-icons/fa';
+import { FaGraduationCap, FaCalendar, FaMapMarkerAlt, FaCertificate, FaExternalLinkAlt } from 'react-icons/fa';
 import { educationService } from '../services/education.service';
 import type { Education } from '../types/education.types';
 import './HomePage.css';
@@ -52,9 +52,11 @@ const EducationPage = () => {
               </p>
             ) : (
               <div style={{ maxWidth: '800px', margin: '0 auto' }}>
-                {education.map((edu, index) => (
-                  <motion.div
-                    key={edu.id}
+                {education.map((edu, index) => {
+                  const certificateCount = edu.certificate_count ?? (edu.certificates?.length ?? 0);
+                  return (
+                    <motion.div
+                      key={edu.id}
                     initial={{ opacity: 0, x: -20 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ duration: 0.5, delay: index * 0.1 }}
@@ -79,7 +81,8 @@ const EducationPage = () => {
                       </div>
                       <div style={{ flex: 1 }}>
                         <h3 style={{ margin: '0 0 0.5rem', color: '#2d3748', fontSize: '1.5rem' }}>
-                          {edu.degree} in {edu.field_of_study}
+                          {edu.degree}
+                          {edu.field_of_study ? ` in ${edu.field_of_study}` : ''}
                         </h3>
                         <h4 style={{ margin: '0 0 1rem', color: '#4a5568', fontWeight: 500 }}>
                           {edu.institution}
@@ -97,6 +100,14 @@ const EducationPage = () => {
                             <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: '#718096', fontSize: '0.875rem' }}>
                               <FaMapMarkerAlt />
                               <span>{edu.location}</span>
+                            </div>
+                          )}
+                          {certificateCount > 0 && (
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: '#805ad5', fontSize: '0.875rem' }}>
+                              <FaCertificate />
+                              <span>
+                                {certificateCount} certificate{certificateCount === 1 ? '' : 's'}
+                              </span>
                             </div>
                           )}
                         </div>
@@ -154,10 +165,62 @@ const EducationPage = () => {
                             </div>
                           </div>
                         )}
+
+                        {edu.certificates && edu.certificates.length > 0 && (
+                          <div style={{ marginTop: '1.5rem' }}>
+                            <h5 style={{ color: '#2d3748', marginBottom: '0.75rem' }}>Certificates & Modules:</h5>
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+                              {edu.certificates.map((certificate) => (
+                                <div
+                                  key={certificate.id}
+                                  style={{
+                                    border: '1px solid #e2e8f0',
+                                    borderRadius: '8px',
+                                    padding: '0.75rem 1rem',
+                                    display: 'flex',
+                                    flexWrap: 'wrap',
+                                    justifyContent: 'space-between',
+                                    gap: '0.75rem',
+                                  }}
+                                >
+                                  <div>
+                                    <div style={{ fontWeight: 600 }}>{certificate.title}</div>
+                                    <div style={{ color: '#4a5568', fontSize: '0.9rem' }}>{certificate.issuer}</div>
+                                    {certificate.issued_date && (
+                                      <div style={{ color: '#718096', fontSize: '0.8rem', marginTop: '0.25rem' }}>
+                                        Issued {new Date(certificate.issued_date).toLocaleDateString('en-US', {
+                                          month: 'short',
+                                          year: 'numeric',
+                                        })}
+                                      </div>
+                                    )}
+                                  </div>
+                                  {certificate.credential_url && (
+                                    <a
+                                      href={certificate.credential_url}
+                                      target="_blank"
+                                      rel="noreferrer"
+                                      style={{
+                                        display: 'inline-flex',
+                                        alignItems: 'center',
+                                        gap: '0.35rem',
+                                        color: '#2b6cb0',
+                                        fontWeight: 600,
+                                      }}
+                                    >
+                                      <FaExternalLinkAlt /> View Credential
+                                    </a>
+                                  )}
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        )}
                       </div>
                     </div>
-                  </motion.div>
-                ))}
+                    </motion.div>
+                  );
+                })}
               </div>
             )}
           </motion.div>

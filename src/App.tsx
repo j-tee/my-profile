@@ -20,8 +20,18 @@ import AdminDashboard from './pages/admin/AdminDashboard';
 import AdminHome from './pages/admin/AdminHome';
 import ProjectsList from './pages/admin/ProjectsList';
 import ProjectForm from './pages/admin/ProjectForm';
+import SkillsList from './pages/admin/SkillsList';
+import SkillForm from './pages/admin/SkillForm';
+import ExperiencesList from './pages/admin/ExperiencesList';
+import ExperienceForm from './pages/admin/ExperienceForm';
+import EducationList from './pages/admin/EducationList';
+import EducationForm from './pages/admin/EducationForm';
 import UsersList from './pages/admin/UsersList';
 import UserForm from './pages/admin/UserForm';
+import CertificationsList from './pages/admin/CertificationsList';
+import CertificationForm from './pages/admin/CertificationForm';
+import MessagesList from './pages/admin/MessagesList';
+import MessageDetail from './pages/admin/MessageDetail';
 import './App.css';
 
 // Placeholder components - will be implemented
@@ -75,6 +85,20 @@ function App() {
             <Route path="projects" element={<ProjectsList />} />
             <Route path="projects/new" element={<ProjectForm />} />
             <Route path="projects/:id/edit" element={<ProjectForm />} />
+            <Route path="experiences" element={<ExperiencesList />} />
+            <Route path="experiences/new" element={<ExperienceForm />} />
+            <Route path="experiences/:id/edit" element={<ExperienceForm />} />
+            <Route path="education" element={<EducationList />} />
+            <Route path="education/new" element={<EducationForm />} />
+            <Route path="education/:id/edit" element={<EducationForm />} />
+            <Route path="skills" element={<SkillsList />} />
+            <Route path="skills/new" element={<SkillForm />} />
+            <Route path="skills/:id/edit" element={<SkillForm />} />
+            <Route path="certifications" element={<CertificationsList />} />
+            <Route path="certifications/new" element={<CertificationForm />} />
+            <Route path="certifications/:id/edit" element={<CertificationForm />} />
+            <Route path="messages" element={<MessagesList />} />
+            <Route path="messages/:id" element={<MessageDetail />} />
             <Route path="users" element={<UsersList />} />
             <Route path="users/new" element={<UserForm />} />
             <Route path="users/:id/edit" element={<UserForm />} />

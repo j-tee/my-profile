@@ -6,6 +6,7 @@ import { userService } from '../../services/user.service';
 import { useAuth } from '../../contexts/useAuth';
 import type { UserDetail, UpdateUserRequest, CreateUserRequest } from '../../types/user.types';
 import type { UserRole } from '../../types/auth.types';
+import SelectField from '../../components/common/SelectField';
 import '../admin/AdminDashboard.css';
 
 const UserForm: React.FC = () => {
@@ -269,24 +270,24 @@ const UserForm: React.FC = () => {
           <h2 style={{ marginBottom: '1.5rem', color: '#1a202c' }}>Permissions & Status</h2>
 
           <div className="form-grid">
-            <div className="form-group">
-              <label htmlFor="role">Role *</label>
-              <select
-                id="role"
-                name="role"
-                value={formData.role}
-                onChange={handleChange}
-                disabled={loading || isEditingSelf}
-                required
-              >
-                <option value="viewer">Viewer - View only access</option>
-                <option value="editor">Editor - Can manage content</option>
-                <option value="super_admin">Super Admin - Full access</option>
-              </select>
-              {isEditingSelf && (
-                <small style={{ color: '#e53e3e' }}>You cannot change your own role</small>
-              )}
-            </div>
+            <SelectField
+              id="role"
+              name="role"
+              label="Role *"
+              value={formData.role}
+              options={[
+                { value: 'viewer', label: 'Viewer - View only access' },
+                { value: 'editor', label: 'Editor - Can manage content' },
+                { value: 'super_admin', label: 'Super Admin - Full access' },
+              ]}
+              onChange={(value) =>
+                setFormData((prev) => ({ ...prev, role: value as UserRole }))
+              }
+              isDisabled={loading || isEditingSelf}
+            />
+            {isEditingSelf && (
+              <small style={{ color: '#e53e3e' }}>You cannot change your own role</small>
+            )}
 
             <div className="form-group">
               <label className="checkbox-label">

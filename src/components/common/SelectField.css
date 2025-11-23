@@ -1,0 +1,11 @@
+.admin-select__control {
+  border-width: 2px !important;
+}
+
+.admin-select__single-value {
+  color: #1a202c;
+}
+
+.admin-select__menu {
+  z-index: 9999;
+}

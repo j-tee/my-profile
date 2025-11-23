@@ -8,6 +8,7 @@ export * from './education.types';
 export * from './skill.types';
 export * from './project.types';
 export * from './certification.types';
+export * from './message.types';
 
 // API types
 export * from './api.types';
