@@ -53,7 +53,7 @@ const EducationPage = () => {
             ) : (
               <div style={{ maxWidth: '800px', margin: '0 auto' }}>
                 {education.map((edu, index) => {
-                  const certificateCount = edu.certificate_count ?? (edu.certificates?.length ?? 0);
+                  const certificateCount = edu.certificate_count ?? (edu.certifications?.length ?? 0);
                   return (
                     <motion.div
                       key={edu.id}
@@ -166,11 +166,11 @@ const EducationPage = () => {
                           </div>
                         )}
 
-                        {edu.certificates && edu.certificates.length > 0 && (
+                        {edu.certifications && edu.certifications.length > 0 && (
                           <div style={{ marginTop: '1.5rem' }}>
                             <h5 style={{ color: '#2d3748', marginBottom: '0.75rem' }}>Certificates & Modules:</h5>
                             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-                              {edu.certificates.map((certificate) => (
+                              {edu.certifications.map((certificate) => (
                                 <div
                                   key={certificate.id}
                                   style={{

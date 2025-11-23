@@ -13,7 +13,7 @@ const educationDetailUrl = (id: string) => `${EDUCATION_BASE_PATH}/${id}/`;
 const EDUCATION_REORDER_URL = `${EDUCATION_BASE_PATH}/reorder/`;
 
 const serializeQueryParams = (
-  params?: (QueryParams & Record<string, unknown>) | undefined
+  params?: QueryParams
 ): Record<string, unknown> | undefined => {
   if (!params) {
     return undefined;
@@ -56,7 +56,7 @@ export const educationService = {
     profileOrUserId: string,
     params?: QueryParams
   ): Promise<PaginatedResponse<Education>> => {
-    const serializedParams = serializeQueryParams(params) ?? {};
+    const serializedParams: Record<string, unknown> = serializeQueryParams(params) ?? {};
     const response = await apiClient.get<PaginatedResponse<Education>>(EDUCATION_LIST_URL, {
       params: {
         ...serializedParams,

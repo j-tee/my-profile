@@ -47,22 +47,22 @@ const toSkillsArray = (value: unknown): string[] => {
 };
 
 const mapCertificationResponse = (payload: Record<string, unknown>): Certification => {
-  const issueDate = (payload.issue_date ?? payload.issueDate ?? '') as string;
+  const issueDate = (payload.issue_date as string) ?? (payload.issueDate as string) ?? '';
   const expirationDate =
-    (payload.expiration_date ?? payload.expirationDate ?? null) as string | null;
-  const credentialId = payload.credential_id ?? payload.credentialId ?? undefined;
-  const credentialUrl = payload.credential_url ?? payload.credentialUrl ?? undefined;
-  const isActive = payload.is_active ?? payload.isActive ?? undefined;
+    (payload.expiration_date as string | null) ?? (payload.expirationDate as string | null) ?? null;
+  const credentialId = (payload.credential_id as string) ?? (payload.credentialId as string) ?? undefined;
+  const credentialUrl = (payload.credential_url as string) ?? (payload.credentialUrl as string) ?? undefined;
+  const isActive = (payload.is_active as boolean) ?? (payload.isActive as boolean) ?? undefined;
 
   return {
     id: String(payload.id ?? ''),
-    education: payload.education ?? payload.education_id ?? undefined,
-    education_display: payload.education_display ?? payload.educationDisplay ?? undefined,
-    educationDisplay: payload.education_display ?? payload.educationDisplay ?? undefined,
-    name: payload.name ?? payload.title ?? '',
-    issuer: payload.issuer ?? '',
-    issuer_display: payload.issuer_display ?? payload.issuerDisplay ?? undefined,
-    issuerDisplay: payload.issuer_display ?? payload.issuerDisplay ?? undefined,
+    education: (payload.education as string) ?? (payload.education_id as string) ?? undefined,
+    education_display: (payload.education_display as string) ?? (payload.educationDisplay as string) ?? undefined,
+    educationDisplay: (payload.education_display as string) ?? (payload.educationDisplay as string) ?? undefined,
+    name: (payload.name as string) ?? (payload.title as string) ?? '',
+    issuer: (payload.issuer as string) ?? '',
+    issuer_display: (payload.issuer_display as string) ?? (payload.issuerDisplay as string) ?? undefined,
+    issuerDisplay: (payload.issuer_display as string) ?? (payload.issuerDisplay as string) ?? undefined,
     issue_date: issueDate,
     issueDate,
     expiration_date: expirationDate,
@@ -71,15 +71,15 @@ const mapCertificationResponse = (payload: Record<string, unknown>): Certificati
     credentialId,
     credential_url: credentialUrl,
     credentialUrl,
-    description: payload.description ?? undefined,
+    description: (payload.description as string) ?? undefined,
     skills: toSkillsArray(payload.skills),
     order: typeof payload.order === 'number' ? payload.order : undefined,
     is_active: isActive,
     isActive,
-    created_at: payload.created_at ?? payload.createdAt ?? undefined,
-    createdAt: payload.created_at ?? payload.createdAt ?? undefined,
-    updated_at: payload.updated_at ?? payload.updatedAt ?? undefined,
-    updatedAt: payload.updated_at ?? payload.updatedAt ?? undefined,
+    created_at: (payload.created_at as string) ?? (payload.createdAt as string) ?? undefined,
+    createdAt: (payload.created_at as string) ?? (payload.createdAt as string) ?? undefined,
+    updated_at: (payload.updated_at as string) ?? (payload.updatedAt as string) ?? undefined,
+    updatedAt: (payload.updated_at as string) ?? (payload.updatedAt as string) ?? undefined,
   };
 };
 
@@ -91,20 +91,22 @@ const mapPaginatedCertifications = (
     : [];
 
   const inferredPageSize =
-    payload.pageSize ?? payload.page_size ?? (results.length > 0 ? results.length : 1);
+    (payload.pageSize as number) ?? (payload.page_size as number) ?? (results.length > 0 ? results.length : 1);
+
+  const count = (payload.count as number) ?? results.length;
 
   return {
     results,
-    count: payload.count ?? results.length,
-    next: payload.next ?? undefined,
-    previous: payload.previous ?? undefined,
-    page: payload.page ?? payload.current ?? 1,
+    count,
+    next: (payload.next as string) ?? undefined,
+    previous: (payload.previous as string) ?? undefined,
+    page: (payload.page as number) ?? (payload.current as number) ?? 1,
     pageSize: inferredPageSize,
     totalPages:
-      payload.totalPages ??
-      payload.total_pages ??
-      (payload.count && inferredPageSize
-        ? Math.max(1, Math.ceil(payload.count / inferredPageSize))
+      (payload.totalPages as number) ??
+      (payload.total_pages as number) ??
+      (count && inferredPageSize
+        ? Math.max(1, Math.ceil(count / inferredPageSize))
         : 1),
   };
 };

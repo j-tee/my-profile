@@ -74,20 +74,22 @@ const mapPaginatedMessages = (
     : [];
 
   const inferredPageSize =
-    payload.pageSize ?? payload.page_size ?? (results.length > 0 ? results.length : 1);
+    (payload.pageSize as number) ?? (payload.page_size as number) ?? (results.length > 0 ? results.length : 1);
+
+  const count = (payload.count as number) ?? results.length;
 
   return {
     results,
-    count: payload.count ?? results.length,
-    next: payload.next ?? undefined,
-    previous: payload.previous ?? undefined,
-    page: payload.page ?? payload.current ?? 1,
+    count,
+    next: (payload.next as string) ?? undefined,
+    previous: (payload.previous as string) ?? undefined,
+    page: (payload.page as number) ?? (payload.current as number) ?? 1,
     pageSize: inferredPageSize,
     totalPages:
-      payload.totalPages ??
-      payload.total_pages ??
-      (payload.count && inferredPageSize
-        ? Math.max(1, Math.ceil(payload.count / inferredPageSize))
+      (payload.totalPages as number) ??
+      (payload.total_pages as number) ??
+      (count && inferredPageSize
+        ? Math.max(1, Math.ceil(count / inferredPageSize))
         : 1),
   };
 };

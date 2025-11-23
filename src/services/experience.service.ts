@@ -58,21 +58,21 @@ const toNumber = (value: unknown, fallback = 0) => {
 };
 
 const mapExperienceResponse = (payload: Record<string, unknown>): Experience => {
-  const employmentType = normalizeEmploymentType(payload.employment_type ?? payload.employmentType);
-  const locationType = normalizeLocationType(payload.location_type ?? payload.locationType);
-  const startDate = (payload.start_date ?? payload.startDate ?? '') as string;
-  const endDate = (payload.end_date ?? payload.endDate ?? null) as string | null;
+  const employmentType = normalizeEmploymentType((payload.employment_type as string) ?? (payload.employmentType as string));
+  const locationType = normalizeLocationType((payload.location_type as string) ?? (payload.locationType as string));
+  const startDate = (payload.start_date as string) ?? (payload.startDate as string) ?? '';
+  const endDate = (payload.end_date as string | null) ?? (payload.endDate as string | null) ?? null;
 
   return {
     id: String(payload.id ?? ''),
     profile: (payload.profile as string) ?? undefined,
-    profileId: (payload.profile_id as string) ?? payload.profile ?? payload.user ?? undefined,
-    title: payload.title ?? payload.position ?? undefined,
-    position: payload.position ?? payload.title ?? '',
-    company: payload.company ?? '',
+    profileId: (payload.profile_id as string) ?? (payload.profile as string) ?? (payload.user as string) ?? undefined,
+    title: (payload.title as string) ?? (payload.position as string) ?? undefined,
+    position: (payload.position as string) ?? (payload.title as string) ?? '',
+    company: (payload.company as string) ?? '',
     employment_type: employmentType,
     employmentType,
-    location: payload.location ?? '',
+    location: (payload.location as string) ?? '',
     location_type: locationType,
     locationType,
     start_date: startDate,
@@ -80,16 +80,16 @@ const mapExperienceResponse = (payload: Record<string, unknown>): Experience => 
     end_date: endDate,
     endDate: endDate ?? undefined,
     current: toBoolean(payload.current ?? payload.is_current),
-    description: payload.description ?? '',
+    description: (payload.description as string) ?? '',
     key_responsibilities: toArray(payload.key_responsibilities ?? payload.responsibilities),
     responsibilities: toArray(payload.responsibilities ?? payload.key_responsibilities),
     achievements: toArray(payload.achievements),
     technologies: toArray(payload.technologies),
     order: toNumber(payload.order ?? payload.display_order, 0),
-    created_at: payload.created_at ?? payload.createdAt ?? undefined,
-    createdAt: payload.created_at ?? payload.createdAt ?? undefined,
-    updated_at: payload.updated_at ?? payload.updatedAt ?? undefined,
-    updatedAt: payload.updated_at ?? payload.updatedAt ?? undefined,
+    created_at: (payload.created_at as string) ?? (payload.createdAt as string) ?? undefined,
+    createdAt: (payload.created_at as string) ?? (payload.createdAt as string) ?? undefined,
+    updated_at: (payload.updated_at as string) ?? (payload.updatedAt as string) ?? undefined,
+    updatedAt: (payload.updated_at as string) ?? (payload.updatedAt as string) ?? undefined,
   };
 };
 
@@ -99,20 +99,22 @@ const mapPaginatedExperiences = (payload: Record<string, unknown>): PaginatedRes
     : [];
 
   const pageSizeCandidate =
-    payload.pageSize ?? payload.page_size ?? (results.length > 0 ? results.length : 1);
+    (payload.pageSize as number) ?? (payload.page_size as number) ?? (results.length > 0 ? results.length : 1);
+
+  const count = (payload.count as number) ?? results.length;
 
   return {
     results,
-    count: payload.count ?? results.length,
-    next: payload.next ?? undefined,
-    previous: payload.previous ?? undefined,
-    page: payload.page ?? payload.current ?? 1,
+    count,
+    next: (payload.next as string) ?? undefined,
+    previous: (payload.previous as string) ?? undefined,
+    page: (payload.page as number) ?? (payload.current as number) ?? 1,
     pageSize: pageSizeCandidate,
     totalPages:
-      payload.totalPages ??
-      payload.total_pages ??
-      (payload.count && pageSizeCandidate
-        ? Math.max(1, Math.ceil(payload.count / pageSizeCandidate))
+      (payload.totalPages as number) ??
+      (payload.total_pages as number) ??
+      (count && pageSizeCandidate
+        ? Math.max(1, Math.ceil(count / pageSizeCandidate))
         : 1),
   };
 };

@@ -237,9 +237,9 @@ const EducationForm: React.FC = () => {
       name: certificationForm.name.trim(),
       issuer: certificationForm.issuer.trim(),
       issueDate: certificationForm.issueDate,
-      expirationDate: certificationForm.expirationDate || undefined,
-      credentialId: certificationForm.credentialId?.trim() || undefined,
-      credentialUrl: certificationForm.credentialUrl?.trim() || undefined,
+      expirationDate: certificationForm.expirationDate ? certificationForm.expirationDate : null,
+      credentialId: certificationForm.credentialId?.trim() || null,
+      credentialUrl: certificationForm.credentialUrl?.trim() || null,
       skills,
       order: certificationForm.order,
     };
