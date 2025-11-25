@@ -1,0 +1,52 @@
+Subject: Re: Job Search Experience and Market Challenges
+
+Dear Kate,
+
+Thank you for the thoughtful follow-up. I appreciate you taking the time to understand my experience beyond just matching credentials to job descriptions.
+
+To be candid, I've encountered several challenges in my job search that I believe you can help address:
+
+**1. Geographic/Remote Work Misalignment**
+The majority of roles I've found are either requiring full-time on-site presence in the US (where I'd need visa sponsorship) or are hesitant about fully remote international candidates. Being based in Ghana while having enterprise-level experience creates an interesting paradox—I'm managing production systems serving 50K+ users with 99.9% uptime, yet many companies hesitate due to location rather than capability.
+
+**2. Experience Level vs. Title Disconnect**
+I'm often seeing roles labeled "Senior" that actually describe mid-level responsibilities, or conversely, "Staff/Principal" roles that require my skillset but assume I need to be located in a tech hub. The challenge is finding roles that match both my technical depth (full-stack, SaaS architecture, technical leadership) AND my leadership experience (10+ years, team mentorship, business impact) without location being a disqualifier.
+
+**3. ATS and Initial Screening Barriers**
+Many applications seem to get filtered out before reaching human eyes, possibly because:
+- My current "freelance" work managing large-scale SaaS platforms may not fit traditional employment patterns
+- International phone numbers and addresses might trigger automatic filters
+- Keywords like "Ghana" or lack of US-based experience could be screening me out
+
+**4. Compensation Transparency Issues**
+When I do get responses, there's often a significant disconnect when compensation is finally discussed. Some companies see "Ghana-based" and immediately adjust expectations downward, not recognizing that I'm delivering enterprise-level results comparable to US-based developers. The $100K-$145K range you mentioned feels right for the value I bring, but getting companies to see past geography to evaluate actual impact has been challenging.
+
+**5. Limited Conversations About Impact**
+Most interactions focus heavily on technical stack (which I clearly have) but rarely get to the business impact and scale of what I've built. I'm not just writing code—I'm architecting systems that serve 500+ organizations and 50,000+ users, but that narrative often gets lost in checkbox-style screening.
+
+**What I'm Really Looking For:**
+- A company that values results and impact over physical location
+- A role where my ability to build and scale enterprise SaaS platforms is the primary consideration
+- An opportunity to contribute to meaningful projects with modern tech stacks
+- A team culture that embraces remote collaboration (which I've proven I can do effectively through Microverse and my client work)
+- Fair compensation that reflects the enterprise-level work I'm doing, not discounted based on geography
+
+**What Would Make Me Thrive:**
+- Working on complex, challenging technical problems at scale
+- Mentoring and elevating other developers (something I'm already doing and love)
+- Contributing to product strategy and technical architecture decisions
+- A company that measures success by output and impact, not hours at a desk
+- Clear growth path toward technical leadership or architect roles
+
+I believe the right opportunity exists—I just need help finding companies that are genuinely open to exceptional remote talent regardless of location, and where my track record of building and scaling production systems speaks louder than my physical address.
+
+Does this context help clarify what you need to position me effectively? I'm confident that with your network and understanding of how to frame my experience, we can find the right match.
+
+Looking forward to your thoughts.
+
+Best regards,
+
+Julius Tetteh
++233203344991
+juliustetteh@gmail.com
+https://www.linkedin.com/in/julius-tetteh/
