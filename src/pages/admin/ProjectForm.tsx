@@ -48,8 +48,8 @@ const ProjectForm: React.FC = () => {
 
   // Set user ID from auth context
   useEffect(() => {
-      if (!user?.id) {
-        toast.error('User ID is required. Please make sure you are logged in.');
+    if (user?.id) {
+      setFormData(prev => ({ ...prev, user: user.id }));
     }
   }, [user]);
 
